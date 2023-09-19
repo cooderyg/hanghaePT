@@ -4,7 +4,10 @@ import { Question } from './entities/question.entity';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatgptsService } from '../chatgpts/chatgpts.service';
-import { IQuestionsServiceCreateQuestion } from './interfaces/questions-service.interface';
+import {
+  IQuestionServiceFindById,
+  IQuestionsServiceCreateQuestion,
+} from './interfaces/questions-service.interface';
 
 @Injectable()
 export class QuestionsService {
@@ -26,10 +29,14 @@ export class QuestionsService {
 
     //json으로 변환하기
     const responseData = JSON.parse(chatgptAnswer);
-
     createQuestionDto.answer = responseData.message;
 
-    return await this.questionsRepository.save(createQuestionDto);
+    console.log(createQuestionDto.title);
+
+    return await this.questionsRepository.save({
+      id: userId,
+      ...createQuestionDto,
+    });
   }
 
   // 모든 질문 조회

@@ -10,19 +10,18 @@ import {
 import { QuestionsService } from './questions.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './entities/question.entity';
-import { KakaoAuthGuard } from '../auth/guard/auth.guard';
-import { SocialUser } from 'src/commons/decorators/user.decorator';
-import { SocialUserAfterAuth } from 'src/commons/decorators/user.decorator';
+import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
+import { AccessAuthGuard } from '../auth/guard/auth.guard';
 
 @Controller('/api/questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
   // 질문 생성
-  @UseGuards(KakaoAuthGuard)
+  @UseGuards(AccessAuthGuard)
   @Post()
   async createQuestion(
-    @SocialUser() user: SocialUserAfterAuth,
+    @User() user: UserAfterAuth,
     @Body() createQuestionDto: CreateQuestionDto,
   ): Promise<Question> {
     return await this.questionsService.createQuestion({

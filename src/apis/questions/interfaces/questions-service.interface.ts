@@ -4,3 +4,7 @@ export interface IQuestionsServiceCreateQuestion {
   createQuestionDto: CreateQuestionDto;
   userId: string;
 }
+
+export interface IQuestionServiceFindById {
+  userId: string;
+}
