@@ -7,12 +7,14 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UsersModule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { PostsModule } from './apis/posts/posts.module';
+import { StudiesModule } from './apis/studies/studies.module';
 
 @Module({
   imports: [
     AuthModule,
     PostsModule,
     UsersModule,
+    StudiesModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

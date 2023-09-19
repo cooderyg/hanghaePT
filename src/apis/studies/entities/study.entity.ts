@@ -8,16 +8,34 @@ import {
 } from 'typeorm';
 import { StudyUser } from './studyUser.entity';
 
+export enum TOPIC {
+  JAVA = 'JAVA',
+  JAVASCRIPT = 'JAVASCRIPT',
+  KOTLIN = 'KOTLIN',
+  REACT = 'REACT',
+  NEXT = 'NEXT',
+  NEST = 'NEST',
+  NODE = 'NODE',
+  SPRING = 'SPRING',
+  CS = 'CS',
+}
+
 @Entity()
 export class Study {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  maxCount: number;
+  title: string;
 
   @Column()
+  maxCount: number;
+
+  @Column({ default: 1 })
   joinCount: number;
+
+  @Column({ type: 'enum', enum: TOPIC })
+  topic: TOPIC;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -25,6 +43,6 @@ export class Study {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => StudyUser, (studyUser) => studyUser.study)
+  @OneToMany(() => StudyUser, (studyUser) => studyUser.study, { cascade: true })
   studyUsers: StudyUser[];
 }
