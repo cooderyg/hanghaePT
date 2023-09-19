@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 
 @Injectable()
 export class ChatgptsService {
-  async createChatgpt(development: string) {
+  async createChatgpt(answer: string) {
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -13,7 +13,7 @@ export class ChatgptsService {
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: '개발과 관련된 질문만 답해주세요.' },
-        { role: 'assistant', content: development },
+        { role: 'assistant', content: answer },
       ],
       max_tokens: 10,
     });
