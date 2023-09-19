@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import {
   IAuthServiceGetAccessToken,
@@ -7,6 +7,7 @@ import {
   IAuthServiceSocialLogin,
 } from './interfaces/auth-service.interface';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -49,5 +50,22 @@ export class AuthService {
 
   refresh({ userId }: IAuthServiceRefresh): string {
     return this.getAccessToken({ userId });
+  }
+
+  async login({ loginDto }) {
+    const { email, password } = loginDto;
+    const user = await this.usersService.findByEmail({ email });
+
+    if (!user)
+      throw new UnauthorizedException('해당하는 이메일의 유저가 없습니다.');
+
+    const isAuth = await bcrypt.compare(password, user.password);
+
+    if (!isAuth) throw new UnauthorizedException();
+
+    const accessToken = this.getAccessToken({ userId: user.id });
+    const refreshToken = this.getRefreshToken({ userId: user.id });
+
+    return { accessToken, refreshToken };
   }
 }
