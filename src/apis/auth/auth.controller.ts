@@ -3,7 +3,7 @@ import {
   SocialUserAfterAuth,
   UserAfterAuth,
 } from './../../commons/decorators/user.decorator';
-import { Controller, Post, Get, Res, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Res, UseGuards, Body } from '@nestjs/common';
 import { Response } from 'express';
 import {
   AccessAuthGuard,
@@ -45,5 +45,16 @@ export class AuthController {
 
     res.cookie('accessToken', accessToken);
     return { message: 'refresh' };
+  }
+
+  @Post('login')
+  async login(@Body() loginDto, @Res({ passthrough: true }) res: Response) {
+    const { accessToken, refreshToken } = await this.authService.login({
+      loginDto,
+    });
+    res.cookie('accessToken', accessToken);
+    res.cookie('refreshToken', refreshToken);
+
+    return { message: '토큰 발급 완료' };
   }
 }
