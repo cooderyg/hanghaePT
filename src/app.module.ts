@@ -6,13 +6,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UsersModule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
+
 import { PostsModule } from './apis/posts/posts.module';
 import { StudiesModule } from './apis/studies/studies.module';
+
+import { ChatgptsModule } from './apis/chatgpts/chatgpts.module';
+import { QuestionsModule } from './apis/questions/questions.module';
 
 @Module({
   imports: [
     AuthModule,
+
     PostsModule,
+
+    QuestionsModule,
+    ChatgptsModule,
+
     UsersModule,
     StudiesModule,
     ConfigModule.forRoot(),
