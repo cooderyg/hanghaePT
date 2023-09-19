@@ -5,7 +5,11 @@ import {
 } from './../../commons/decorators/user.decorator';
 import { Controller, Post, Get, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { KakaoAuthGuard, RefreshAuthGuard } from './guard/auth.guard';
+import {
+  AccessAuthGuard,
+  KakaoAuthGuard,
+  RefreshAuthGuard,
+} from './guard/auth.guard';
 import { AuthService } from './auth.service';
 import { MessageResDto } from 'src/commons/dto/message-res.dto';
 
