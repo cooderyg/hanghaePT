@@ -21,7 +21,6 @@ import { QuestionsModule } from './apis/questions/questions.module';
 
     QuestionsModule,
     ChatgptsModule,
-
     UsersModule,
     StudiesModule,
     ConfigModule.forRoot(),
