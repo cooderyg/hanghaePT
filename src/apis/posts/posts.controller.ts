@@ -31,7 +31,7 @@ export class PostsController {
     return post;
   }
 
-  // 게시글생성
+  // 게시글 생성
   @UseGuards(AccessAuthGuard)
   @Post()
   async createPost(
