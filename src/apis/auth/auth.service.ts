@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import {
   IAuthServiceGetAccessToken,
   IAuthServiceGetRefreshToken,
+  IAuthServiceRefresh,
   IAuthServiceSocialLogin,
 } from './interfaces/auth-service.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -44,5 +45,9 @@ export class AuthService {
     const refreshToken = this.getRefreshToken({ userId: user.id });
 
     return { accessToken, refreshToken };
+  }
+
+  refresh({ userId }: IAuthServiceRefresh): string {
+    return this.getAccessToken({ userId });
   }
 }
