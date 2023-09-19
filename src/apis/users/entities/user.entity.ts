@@ -24,6 +24,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
+  profileImgUrl: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

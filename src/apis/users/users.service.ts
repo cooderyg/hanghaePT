@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   async createUser({ createUserDto }: IUsersServiceCreateUser): Promise<User> {
-    const { email, password, name } = createUserDto;
+    const { email, password, name, profileImgUrl } = createUserDto;
     const user = await this.findByEmail({ email });
 
     if (user) throw new ConflictException('이미 등록 된 이메일입니다.');
@@ -30,6 +30,7 @@ export class UsersService {
       email,
       name,
       password: hashedPassword,
+      profileImgUrl,
     });
 
     return result;

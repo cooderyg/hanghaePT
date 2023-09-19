@@ -15,4 +15,5 @@ export interface SocialUserAfterAuth {
   email: string;
   password: string;
   name: string;
+  profileImgUrl: string;
 }
