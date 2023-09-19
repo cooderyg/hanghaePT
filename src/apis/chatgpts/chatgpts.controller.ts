@@ -6,7 +6,7 @@ export class ChatgptsController {
   constructor(private readonly chatgptsService: ChatgptsService) {}
 
   @Post()
-  createChatgpt(@Body('answer') answer: string) {
-    return this.chatgptsService.createChatgpt(answer);
+  createChatgpt(@Body('userMessage') userMessage: string) {
+    return this.chatgptsService.createChatgpt(userMessage);
   }
 }

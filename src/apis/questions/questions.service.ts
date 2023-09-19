@@ -23,12 +23,16 @@ export class QuestionsService {
     userId,
     createQuestionDto,
   }: IQuestionsServiceCreateQuestion): Promise<Question> {
-    const answer = createQuestionDto.answer;
+    // 질문가져오기
+    const question = createQuestionDto.title;
 
-    //챗GPT의 대답 가져오기
-    const chatgptAnswer = await this.chatgptsService.createChatgpt(answer);
+    // 질문을 챗 gpt에게 넘겨서 답변 받기
+    const chatgptAnswer = await this.chatgptsService.createChatgpt(question);
+
+    // 답변을 JSON으로 변환
     const responseData = JSON.parse(chatgptAnswer);
 
+    // responseData 메세지를 createQuestionDto.answer에 삽입
     createQuestionDto.answer = responseData.message;
 
     return await this.questionsRepository.save({

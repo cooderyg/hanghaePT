@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 
 @Injectable()
 export class ChatgptsService {
-  async createChatgpt(answer: string) {
+  async createChatgpt(userMessage: string) {
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -11,11 +11,10 @@ export class ChatgptsService {
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: '개발과 관련된 질문만 답해주세요.' },
-        { role: 'assistant', content: answer },
+        // { role: 'user', content: '질문에 답해주세요' },
+        { role: 'user', content: userMessage },
       ],
-      max_tokens: 10,
+      max_tokens: 100,
     });
 
     const responseData = {
