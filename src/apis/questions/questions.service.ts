@@ -5,7 +5,8 @@ import { CreateQuestionDto } from './dto/create-question.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatgptsService } from '../chatgpts/chatgpts.service';
 import {
-  IQuestionServiceFindById,
+  IQuestionServiceDeleteQuestion,
+  IQuestionServiceFindQuestion,
   IQuestionsServiceCreateQuestion,
 } from './interfaces/questions-service.interface';
 
@@ -17,7 +18,7 @@ export class QuestionsService {
     private readonly chatgptsService: ChatgptsService,
   ) {}
 
-  // 질문 생성 (유저가드 필요)
+  // 질문 생성
   async createQuestion({
     userId,
     createQuestionDto,
@@ -26,16 +27,17 @@ export class QuestionsService {
 
     //챗GPT의 대답 가져오기
     const chatgptAnswer = await this.chatgptsService.createChatgpt(answer);
-
-    //json으로 변환하기
     const responseData = JSON.parse(chatgptAnswer);
-    createQuestionDto.answer = responseData.message;
 
-    console.log(createQuestionDto.title);
+    createQuestionDto.answer = responseData.message;
 
     return await this.questionsRepository.save({
       id: userId,
-      ...createQuestionDto,
+      title: createQuestionDto.title,
+      answer: createQuestionDto.answer,
+      library: createQuestionDto.library,
+      topic: createQuestionDto.topic,
+      type: createQuestionDto.type,
     });
   }
 
@@ -44,8 +46,11 @@ export class QuestionsService {
     return await this.questionsRepository.find();
   }
 
-  // 질문 조회 (유저가드 필요)
-  async findQuestion(questionId: string): Promise<Question> {
+  // 질문 조회
+  async findQuestion({
+    userId,
+    questionId,
+  }: IQuestionServiceFindQuestion): Promise<Question> {
     const question = await this.questionsRepository.findOne({
       where: { id: questionId },
     });
@@ -61,7 +66,10 @@ export class QuestionsService {
   }
 
   // 질문 삭제하기 (유저가드 필요)
-  async deleteQuestion(questionId: string): Promise<void> {
+  async deleteQuestion({
+    userId,
+    questionId,
+  }: IQuestionServiceDeleteQuestion): Promise<void> {
     const question = await this.questionsRepository.findOne({
       where: { id: questionId },
     });

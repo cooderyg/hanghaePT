@@ -36,17 +36,29 @@ export class QuestionsController {
     return await this.questionsService.findAllQuestion();
   }
 
-  // 질문 조회 (유저가드 추가 필요)
+  // 질문 조회
+  @UseGuards(AccessAuthGuard)
   @Get(':questionId')
   async findQuestion(
+    @User() user: UserAfterAuth,
     @Param('questionId') questionId: string,
   ): Promise<Question> {
-    return await this.questionsService.findQuestion(questionId);
+    return await this.questionsService.findQuestion({
+      userId: user.id,
+      questionId,
+    });
   }
 
   // 질문 삭제 (유저가드 추가 필요)
+  @UseGuards(AccessAuthGuard)
   @Delete(':questionId')
-  async deleteQuestion(@Param('questionId') questionId: string): Promise<void> {
-    return await this.questionsService.deleteQuestion(questionId);
+  async deleteQuestion(
+    @User() user: UserAfterAuth,
+    @Param('questionId') questionId: string,
+  ): Promise<void> {
+    return await this.questionsService.deleteQuestion({
+      userId: user.id,
+      questionId,
+    });
   }
 }

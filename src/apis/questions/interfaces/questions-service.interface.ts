@@ -5,6 +5,12 @@ export interface IQuestionsServiceCreateQuestion {
   userId: string;
 }
 
-export interface IQuestionServiceFindById {
+export interface IQuestionServiceFindQuestion {
   userId: string;
+  questionId: string;
+}
+
+export interface IQuestionServiceDeleteQuestion {
+  userId: string;
+  questionId: string;
 }
