@@ -1,0 +1,96 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Post } from './entities/post.entity';
+import { Repository } from 'typeorm';
+import {
+  IPostServiceDeletePost,
+  IPostServicePutPost,
+  IPostsServiceCreatePost,
+  IPostsServiceGetPost,
+} from './interfaces/post-service.interfaces';
+
+@Injectable()
+export class PostsService {
+  constructor(
+    @InjectRepository(Post)
+    private readonly postsRepository: Repository<Post>,
+  ) {}
+
+  // 게시글 전체 조회
+  async getAllPost({}): Promise<Post[]> {
+    return await this.postsRepository
+      .createQueryBuilder('post')
+      .select([
+        'post.id',
+        'post.title',
+        'post.content',
+        'post.createdAt',
+        'post.updatedAt',
+      ])
+      .orderBy({ 'post.createdAt': 'DESC' })
+      .getMany();
+  }
+
+  // 게시글 개별 조회
+  async getPost({ postId }: IPostsServiceGetPost): Promise<Post> {
+    const post = await this.postsRepository
+      .createQueryBuilder('post')
+      .select([
+        'post.id',
+        'post.title',
+        'post.content',
+        'post.createdAt',
+        'post.updatedAt',
+        'user.id',
+      ])
+      .leftJoin('post.user', 'user')
+      .where('post.id = :postId', { postId })
+      .getOne();
+    if (!post) throw new NotFoundException('게시글 조회 실패');
+    return post;
+  }
+
+  // 게시글 생성
+  async createPost({
+    userId,
+    createPostDto,
+  }: IPostsServiceCreatePost): Promise<Post> {
+    const { ...rest } = createPostDto;
+
+    const post = await this.postsRepository.save({
+      user: { id: userId },
+      ...rest,
+    });
+    return post;
+  }
+
+  // 게시글 수정
+  async putPost({
+    userId,
+    postId,
+    createPostDto,
+  }: IPostServicePutPost): Promise<Post> {
+    const post = await this.getPost({ postId });
+    if (!post) throw new NotFoundException('게시글을 찾을 수 없습니다.');
+
+    if (post.user.id !== userId)
+      throw new NotFoundException('권한이 없습니다.');
+
+    post.title = createPostDto.title;
+    post.content = createPostDto.content;
+    await this.postsRepository.save(post);
+    return post;
+  }
+
+  // 게시글 삭제
+  async deletePost({ postId, userId }: IPostServiceDeletePost): Promise<Post> {
+    const post = await this.getPost({ postId });
+    if (!post) throw new NotFoundException('게시글을 찾을 수 없습니다.');
+
+    if (post.user.id !== userId)
+      throw new NotFoundException('권한이 없습니다.');
+
+    await this.postsRepository.remove(post);
+    return post;
+  }
+}

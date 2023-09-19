@@ -6,10 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UsersModule } from './apis/users/users.module';
 import { AuthModule } from './apis/auth/auth.module';
+import { PostsModule } from './apis/posts/posts.module';
 
 @Module({
   imports: [
     AuthModule,
+    PostsModule,
     UsersModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
