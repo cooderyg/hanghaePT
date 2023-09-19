@@ -12,4 +12,7 @@ export class SocialLoginDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @IsString()
+  profileImgUrl: string;
 }

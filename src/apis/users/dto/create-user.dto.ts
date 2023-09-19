@@ -13,4 +13,7 @@ export class CreateUserDto {
   @IsString()
   @MaxLength(15)
   name: string;
+
+  @IsString()
+  profileImgUrl: string;
 }
