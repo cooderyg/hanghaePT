@@ -8,9 +8,6 @@ export class CreateQuestionDto {
   title: string;
 
   @IsString()
-  answer: string;
-
-  @IsString()
   library: string;
 
   @IsNotEmpty()

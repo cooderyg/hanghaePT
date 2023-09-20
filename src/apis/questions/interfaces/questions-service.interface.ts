@@ -1,3 +1,4 @@
+import { PageReqDto } from 'src/commons/dto/page-req.dto';
 import { CreateQuestionDto } from '../dto/create-question.dto';
 
 export interface IQuestionsServiceCreateQuestion {
@@ -5,6 +6,9 @@ export interface IQuestionsServiceCreateQuestion {
   userId: string;
 }
 
+export interface IQuestionServiceFindAllQuestion {
+  pageReqDto: PageReqDto;
+}
 export interface IQuestionServiceFindQuestion {
   userId: string;
   questionId: string;

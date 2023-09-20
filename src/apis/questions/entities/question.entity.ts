@@ -39,9 +39,6 @@ export class Question {
   title: string;
 
   @Column()
-  answer: string;
-
-  @Column()
   library: string;
 
   @Column({ type: 'enum', enum: TOPIC })
@@ -52,9 +49,6 @@ export class Question {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.questions, { onDelete: 'CASCADE' })
   user: User;

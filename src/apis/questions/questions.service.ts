@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ChatgptsService } from '../chatgpts/chatgpts.service';
 import {
   IQuestionServiceDeleteQuestion,
+  IQuestionServiceFindAllQuestion,
   IQuestionServiceFindQuestion,
   IQuestionsServiceCreateQuestion,
 } from './interfaces/questions-service.interface';
@@ -33,21 +34,42 @@ export class QuestionsService {
     const responseData = JSON.parse(chatgptAnswer);
 
     // responseData 메세지를 createQuestionDto.answer에 삽입
-    createQuestionDto.answer = responseData.message;
+    // createQuestionDto.answer = responseData.message;
 
     return await this.questionsRepository.save({
-      id: userId,
+      user: { id: userId },
       title: createQuestionDto.title,
-      answer: createQuestionDto.answer,
       library: createQuestionDto.library,
       topic: createQuestionDto.topic,
       type: createQuestionDto.type,
     });
   }
 
-  // 모든 질문 조회
-  async findAllQuestion(): Promise<Question[]> {
-    return await this.questionsRepository.find();
+  // 모든 질문 조회 (페이지네이션)
+  async findAllQuestion({
+    pageReqDto,
+  }: IQuestionServiceFindAllQuestion): Promise<Question[]> {
+    const { page, size } = pageReqDto;
+
+    const questions = await this.questionsRepository.find({
+      order: { createdAt: 'ASC' }, // 최근순이 아래로 나오게
+      take: size,
+      skip: (page - 1) * size,
+    });
+
+    return questions;
+  }
+
+  // 최근 질문 10개 조회
+  async findRecentQuestion({ userId, countReqDto }): Promise<Question[]> {
+    const { count } = countReqDto;
+
+    const questions = await this.questionsRepository.find({
+      order: { createdAt: 'DESC' },
+      take: count,
+    });
+
+    return questions;
   }
 
   // 질문 조회
@@ -69,7 +91,7 @@ export class QuestionsService {
     return question;
   }
 
-  // 질문 삭제하기 (유저가드 필요)
+  // 질문 삭제하기
   async deleteQuestion({
     userId,
     questionId,

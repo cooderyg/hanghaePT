@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
@@ -12,6 +13,7 @@ import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './entities/question.entity';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
+import { PageReqDto, countReqDto } from 'src/commons/dto/page-req.dto';
 
 @Controller('/api/questions')
 export class QuestionsController {
@@ -30,10 +32,29 @@ export class QuestionsController {
     });
   }
 
-  // 모든 질문 조회
+  // 모든 질문 조회 (페이지 네이션)
   @Get()
-  async findAllQuestion(): Promise<Question[]> {
-    return await this.questionsService.findAllQuestion();
+  async findAllQuestion(@Query() pageReqDto: PageReqDto): Promise<Question[]> {
+    const questions = await this.questionsService.findAllQuestion({
+      pageReqDto,
+    });
+
+    return questions;
+  }
+
+  // 최근 질문 10개 조회
+  @UseGuards(AccessAuthGuard)
+  @Get('recent')
+  async findRecentQuestion(
+    @User() user: UserAfterAuth,
+    @Query() countReqDto: countReqDto,
+  ): Promise<Question[]> {
+    const questions = await this.questionsService.findRecentQuestion({
+      userId: user.id,
+      countReqDto,
+    });
+
+    return questions;
   }
 
   // 질문 조회
