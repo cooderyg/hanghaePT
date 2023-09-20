@@ -1,6 +1,7 @@
 import { PageReqDto, TopicReqDto } from 'src/commons/dto/page-req.dto';
 import { CreateStudyDto } from '../dto/create-study.dto';
 import { ForcedExitStudyDto } from '../dto/forcedExit-study.dto';
+import { UpdateStudyDto } from '../dto/update-study.dto';
 
 export interface IStudiesServiceCreateStudy {
   createStudyDto: CreateStudyDto;
@@ -11,6 +12,12 @@ export interface IStudiesServiceJoinStudy {
   studyId: string;
   hostId: string;
   guestId: string;
+}
+
+export interface IStudiesServiceUpdateStudy {
+  userId: string;
+  studyId: string;
+  updateStudyDto: UpdateStudyDto;
 }
 
 export interface IStudiesServiceOutStudy {

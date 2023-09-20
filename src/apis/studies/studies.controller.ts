@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { ForcedExitStudyDto } from './dto/forcedExit-study.dto';
 import { Study } from './entities/study.entity';
 import { PageReqDto, TopicReqDto } from 'src/commons/dto/page-req.dto';
+import { UpdateStudyDto } from './dto/update-study.dto';
 
 @Controller('api/studies')
 export class StudiesController {
@@ -44,6 +46,22 @@ export class StudiesController {
     await this.studiesService.joinStudy({ studyId, hostId: user.id, guestId });
 
     return { message: '스터디 참여가 완료되었습니다.' };
+  }
+
+  @UseGuards(AccessAuthGuard)
+  @Put(':studyId')
+  async updateStudy(
+    @User() user: UserAfterAuth,
+    @Param('studyId') studyId: string,
+    @Body() updateStudyDto: UpdateStudyDto,
+  ): Promise<Study> {
+    const updatedStudy = await this.studiesService.updateStudy({
+      userId: user.id,
+      studyId,
+      updateStudyDto,
+    });
+
+    return updatedStudy;
   }
 
   @UseGuards(AccessAuthGuard)
