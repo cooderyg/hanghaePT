@@ -2,13 +2,10 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import { TYPE } from '../entities/question.entity';
 import { TOPIC } from '../entities/question.entity';
 
-export class CreateQuestionDto {
+export class ContinueQuestionDto {
   @IsNotEmpty()
   @IsString()
   title: string;
-
-  @IsString()
-  answer: string;
 
   @IsString()
   library: string;
@@ -18,4 +15,8 @@ export class CreateQuestionDto {
 
   @IsNotEmpty()
   type: TYPE;
+
+  @IsNotEmpty()
+  @IsString()
+  query: string;
 }

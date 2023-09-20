@@ -11,6 +11,7 @@ import { StudiesModule } from './apis/studies/studies.module';
 import { ChatgptsModule } from './apis/chatgpts/chatgpts.module';
 import { QuestionsModule } from './apis/questions/questions.module';
 import { CommentsModule } from './apis/comments/comments.module';
+import { QuestionDetailsModule } from './apis/questionDetails/question-details.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CommentsModule } from './apis/comments/comments.module';
     PostsModule,
     CommentsModule,
     QuestionsModule,
+    QuestionDetailsModule,
     ChatgptsModule,
     UsersModule,
     StudiesModule,
@@ -35,6 +37,7 @@ import { CommentsModule } from './apis/comments/comments.module';
       namingStrategy: new SnakeNamingStrategy(),
       timezone: 'UTC',
     }),
+    QuestionDetailsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

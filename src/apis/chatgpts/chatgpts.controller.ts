@@ -5,8 +5,8 @@ import { ChatgptsService } from './chatgpts.service';
 export class ChatgptsController {
   constructor(private readonly chatgptsService: ChatgptsService) {}
 
-  @Post()
-  createChatgpt(@Body('userMessage') userMessage: string) {
-    return this.chatgptsService.createChatgpt(userMessage);
-  }
+  // @Post()
+  // createChatgpt(@Body('userMessage') userMessage: string) {
+  //   return this.chatgptsService.createChatgpt(userMessage);
+  // }
 }

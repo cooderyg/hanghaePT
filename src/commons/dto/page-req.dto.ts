@@ -17,3 +17,9 @@ export class TopicReqDto extends PageReqDto {
   @IsEnum(TOPIC)
   topic: TOPIC;
 }
+
+export class countReqDto {
+  @Transform((param) => Number(param.value))
+  @IsInt()
+  count?: number = 10;
+}
