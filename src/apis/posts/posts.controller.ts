@@ -15,6 +15,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
 import { PageReqDto } from 'src/commons/dto/page-req.dto';
+import { UpdateResult } from 'typeorm';
 
 @Controller('api/posts')
 export class PostsController {
@@ -74,7 +75,7 @@ export class PostsController {
   async deletePost(
     @Param('postId') postId: string,
     @User() user: UserAfterAuth,
-  ): Promise<EPost> {
+  ): Promise<UpdateResult> {
     const post = await this.postsService.deletePost({
       postId,
       userId: user.id,

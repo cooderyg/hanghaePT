@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import {
   IPostServiceDeletePost,
   IPostServicePutPost,
@@ -109,16 +109,18 @@ export class PostsService {
   }
 
   // 게시글 삭제
-  async deletePost({ postId, userId }: IPostServiceDeletePost): Promise<Post> {
+  async deletePost({
+    postId,
+    userId,
+  }: IPostServiceDeletePost): Promise<UpdateResult> {
     const post = await this.getPost({ postId });
     if (!post) throw new NotFoundException('게시글을 찾을 수 없습니다.');
 
     if (post.user.id !== userId)
       throw new NotFoundException('권한이 없습니다.');
 
-    await this.postsRepository.softDelete({
+    return await this.postsRepository.softDelete({
       id: postId,
     });
-    return post;
   }
 }

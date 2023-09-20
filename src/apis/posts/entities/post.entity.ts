@@ -29,7 +29,7 @@ export class Post {
   updatedAt: Date;
 
   @DeleteDateColumn()
-  deleteAt: Date;
+  deletedAt: Date;
 
   @OneToMany(() => Comment, (comment) => comment.post, { cascade: true })
   comments: Comment[];
