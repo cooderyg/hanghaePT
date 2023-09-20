@@ -22,7 +22,7 @@ export class AuthController {
   async kakaoCallback(
     @User() socialUser: SocialUserAfterAuth,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<void> {
+  ) {
     const { accessToken, refreshToken } = await this.authService.OAuthLogin({
       socialLoginDto: socialUser,
     });
@@ -30,7 +30,7 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken);
     res.cookie('accessToken', accessToken);
 
-    res.redirect('/');
+    return { accessToken, refreshToken };
   }
 
   @UseGuards(RefreshAuthGuard)
