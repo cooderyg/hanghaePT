@@ -21,7 +21,34 @@ export class QuestionsService {
     private readonly questionDetailsService: QuestionDetailsService,
   ) {}
 
-  async updateQuestion() {}
+  // 질문 계속
+  async continueQuestion({ questionId, userId, createQuestionDto }) {
+    const { query } = createQuestionDto;
+    const question = await this.findQuestion({ questionId, userId });
+
+    if (!question) {
+      throw new HttpException(
+        '질문을 찾을 수 없습니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const questionDetails =
+      await this.questionDetailsService.findQuestionDetail(questionId);
+
+    const chatgptAnswer = await this.chatgptsService.createChatgpt(
+      questionDetails,
+      createQuestionDto,
+    );
+
+    await this.questionDetailsService.createQuestionDetail(
+      questionId,
+      query,
+      chatgptAnswer,
+    );
+
+    return chatgptAnswer;
+  }
 
   // 질문 생성
   async createQuestion({
@@ -32,10 +59,10 @@ export class QuestionsService {
     const question = createQuestionDto.title;
 
     // 질문을 챗 gpt에게 넘겨서 답변 받기
-    const chatgptAnswer = await this.chatgptsService.createChatgpt(question);
+    // const chatgptAnswer = await this.chatgptsService.createChatgpt(question);
 
     // 답변을 JSON으로 변환
-    const responseData = JSON.parse(chatgptAnswer);
+    // const responseData = JSON.parse(chatgptAnswer);
 
     // responseData 메세지를 createQuestionDto.answer에 삽입
     // createQuestionDto.answer = responseData.message;

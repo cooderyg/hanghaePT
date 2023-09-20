@@ -22,9 +22,12 @@ export class QuestionDetailsService {
     return questions;
   }
 
-  // async createQuestionDetail(
-  // ) {
-  //   const createQuestion = await this.questionDetailsRepository.f
-
-  // }
+  async createQuestionDetail(questionId, query, chatgptAnswer) {
+    const createQuestion = await this.questionDetailsRepository.save({
+      questionId,
+      query,
+      chatgptAnswer,
+    });
+    return;
+  }
 }

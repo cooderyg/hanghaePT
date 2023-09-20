@@ -4,15 +4,27 @@ import { IChatgptServiceCreateChatgpt } from './interfaces/chatgpts-service.inte
 
 @Injectable()
 export class ChatgptsService {
-  async createChatgpt(userMessage: string) {
+  async createChatgpt(questionDetails, createQuestionDto) {
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const messages: IChatgptServiceCreateChatgpt[] = [
+    const { library, topic, type } = createQuestionDto;
+
+    let messages: IChatgptServiceCreateChatgpt[] = [
       { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: userMessage },
+      {
+        role: 'system',
+        content: `you have to answer about ${library},${topic},${type}`,
+      },
     ];
+
+    questionDetails.forEach((q) => {
+      messages.push({ role: 'user', content: q.query });
+      messages.push({ role: 'assistant', content: q.answer });
+    });
+
+    messages.push({ role: 'user', content: createQuestionDto.query });
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
