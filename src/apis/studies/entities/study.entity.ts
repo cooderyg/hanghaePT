@@ -29,6 +29,9 @@ export class Study {
   title: string;
 
   @Column()
+  content: string;
+
+  @Column()
   maxCount: number;
 
   @Column({ default: 1 })

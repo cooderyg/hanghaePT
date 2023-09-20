@@ -92,7 +92,7 @@ export class StudiesController {
   }
 
   // 화면보고 단일 조회 만들기
-  //   @Get('detail/:studyId')
+  //   @Get('details/:studyId')
   //   async detail
 
   @Get()
