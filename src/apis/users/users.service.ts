@@ -4,6 +4,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import {
   IUserServiceFindByEmail,
+  IUserServiceFindById,
   IUsersServiceCreateUser,
 } from './interfaces/users-serviice.interface';
 import * as bcrypt from 'bcrypt';
@@ -17,6 +18,10 @@ export class UsersService {
 
   async findByEmail({ email }: IUserServiceFindByEmail): Promise<User> {
     return await this.usersRepository.findOne({ where: { email } });
+  }
+
+  async findById({ id }: IUserServiceFindById): Promise<User> {
+    return await this.usersRepository.findOne({ where: { id } });
   }
 
   async createUser({ createUserDto }: IUsersServiceCreateUser): Promise<User> {
