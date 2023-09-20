@@ -38,13 +38,13 @@ export class AuthController {
   async refresh(
     @User() user: UserAfterAuth,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<MessageResDto> {
+  ) {
     const accessToken = this.authService.refresh({
       userId: user.id,
     });
-
+    //Todo: 개발완료 시 cookie부분 삭제
     res.cookie('accessToken', accessToken);
-    return { message: 'refresh' };
+    return { accessToken };
   }
 
   @Post('login')
@@ -54,7 +54,7 @@ export class AuthController {
     });
     res.cookie('accessToken', accessToken);
     res.cookie('refreshToken', refreshToken);
-
-    return { message: '토큰 발급 완료' };
+    //Todo: 개발완료 시 cookie부분 삭제
+    return { accessToken, refreshToken };
   }
 }
