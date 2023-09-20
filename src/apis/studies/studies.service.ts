@@ -74,8 +74,12 @@ export class StudiesService {
         lock: { mode: 'pessimistic_write' },
       });
 
-      if (study.maxCount <= study.joinCount)
+      if (study.maxCount <= study.joinCount + 1)
         throw new ConflictException('최대 수용인원을 초과하였습니다');
+      await queryRunner.manager.save(Study, {
+        ...study,
+        joinCount: study.joinCount + 1,
+      });
 
       await queryRunner.manager.insert(StudyUser, {
         study: { id: studyId },
@@ -111,6 +115,7 @@ export class StudiesService {
   async outStudy({ userId, studyId }: IStudiesServiceOutStudy): Promise<void> {
     const studyUser = await this.guestCheck({ studyId, userId });
 
+    await this.studiesRepository.decrement({ id: studyId }, 'joinCount', 1);
     await this.studyUsersRepository.delete({ id: studyUser.id });
   }
 
@@ -128,6 +133,7 @@ export class StudiesService {
       userId: guestId,
     });
 
+    await this.studiesRepository.decrement({ id: studyId }, 'joinCount', 1);
     await this.studyUsersRepository.delete({ id: guestStudyUser.id });
   }
 
