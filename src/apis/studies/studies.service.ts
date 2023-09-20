@@ -14,6 +14,7 @@ import {
   IStudiesServiceFindByUserId,
   IStudiesServiceFindStudies,
   IStudiesServiceFindStudiesByTopic,
+  IStudiesServiceFindStudyDetail,
   IStudiesServiceFindUserStudy,
   IStudiesServiceForcedExitStudy,
   IStudiesServiceJoinStudy,
@@ -128,6 +129,33 @@ export class StudiesService {
     });
 
     await this.studyUsersRepository.delete({ id: guestStudyUser.id });
+  }
+
+  async findStudyDetail({
+    studyId,
+  }: IStudiesServiceFindStudyDetail): Promise<Study> {
+    const study = await this.studiesRepository
+      .createQueryBuilder('study')
+      .select([
+        'study.id',
+        'study.title',
+        'study.content',
+        'study.maxCount',
+        'study.joinCount',
+        'study.topic',
+        'study.createdAt',
+        'studyUser.id',
+        'studyUser.isHost',
+        'user.id',
+        'user.name',
+        'user.email',
+      ])
+      .leftJoin('study.studyUsers', 'studyUser')
+      .leftJoin('studyUser.user', 'user')
+      .where('study.id =:studyId', { studyId })
+      .getOne();
+
+    return study;
   }
 
   async findUserStudy({

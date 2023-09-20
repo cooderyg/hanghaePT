@@ -31,6 +31,10 @@ export interface IStudiesServiceForcedExitStudy {
   forcedExitStudyDto: ForcedExitStudyDto;
 }
 
+export interface IStudiesServiceFindStudyDetail {
+  studyId: string;
+}
+
 export interface IStudiesServiceFindUserStudy {
   userId: string;
   studyId: string;

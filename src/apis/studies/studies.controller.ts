@@ -79,7 +79,7 @@ export class StudiesController {
   @Delete('forced-exit/:studyId')
   async forcedExitStudy(
     @Body() forcedExitStudyDto: ForcedExitStudyDto,
-    @Param('studyId') studyId,
+    @Param('studyId') studyId: string,
     @User() user: UserAfterAuth,
   ): Promise<MessageResDto> {
     await this.studiesService.forcedExitStudy({
@@ -91,9 +91,12 @@ export class StudiesController {
     return { message: '스터디 강퇴가 완료되었습니다.' };
   }
 
-  // 화면보고 단일 조회 만들기
-  //   @Get('details/:studyId')
-  //   async detail
+  @Get('details/:studyId')
+  async getStudyDetail(@Param('studyId') studyId: string): Promise<Study> {
+    const study = await this.studiesService.findStudyDetail({ studyId });
+
+    return study;
+  }
 
   @Get()
   async findStudies(@Query() pageReqDto: PageReqDto): Promise<Study[]> {
