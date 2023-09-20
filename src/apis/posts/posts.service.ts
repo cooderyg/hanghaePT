@@ -9,6 +9,7 @@ import {
   IPostsServiceGetAllPost,
   IPostsServiceGetPost,
   IPostsServiceGetPostPagination,
+  IPostsServiceSearch,
 } from './interfaces/post-service.interfaces';
 
 @Injectable()
@@ -49,6 +50,32 @@ export class PostsService {
     return post;
   }
 
+  // 게시글 검색
+  async searchPosts({ searchReqDto }: IPostsServiceSearch): Promise<Post[]> {
+    const { keyword, page, size } = searchReqDto;
+
+    console.log('get요정이 들어갔는지 확인용');
+
+    const results = await this.postsRepository
+      .createQueryBuilder('post')
+      .select([
+        'post.id',
+        'post.title',
+        'post.content',
+        'post.createdAt',
+        'post.updatedAt',
+      ])
+      .where('post.title like :keyword', { keyword: `%${keyword}%` })
+      .orWhere('post.content like :keyword', { keyword: `%${keyword}%` })
+      .take(size)
+      .skip((page - 1) * size)
+      .getMany();
+
+    console.log('검색이 되었는가?:', results);
+
+    return results;
+  }
+
   // 게시글 디테일 페이지 조회
   async getPostDetail({
     postId,
@@ -81,11 +108,9 @@ export class PostsService {
     userId,
     createPostDto,
   }: IPostsServiceCreatePost): Promise<Post> {
-    const { ...rest } = createPostDto;
-
     const post = await this.postsRepository.save({
       user: { id: userId },
-      ...rest,
+      ...createPostDto,
     });
     return post;
   }
