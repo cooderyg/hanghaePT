@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   HttpException,
   Injectable,
   NotFoundException,
@@ -52,7 +53,8 @@ export class StudiesService {
     const hostStudyUser = await this.findUserStudy({ studyId, userId: hostId });
     if (!hostStudyUser)
       throw new NotFoundException('해당하는 스터디가 없습니다.');
-    if (!hostStudyUser.isHost) throw new HttpException('권한이 없습니다.', 401);
+
+    await this.hostCheck({ studyId, userId: hostId });
 
     const isExistStduyUser = await this.findUserStudy({
       studyId,
@@ -89,12 +91,24 @@ export class StudiesService {
     }
   }
 
-  async outStudy({ userId, studyId }: IStudiesServiceOutStudy): Promise<void> {
-    const studyUser = await this.findUserStudy({ userId, studyId });
-    if (studyUser.isHost)
-      throw new ConflictException('스터디장은 스터디를 나갈 수 없습니다.');
+  async updateStudy({ userId, studyId, updateStudyDto }): Promise<Study> {
+    const study = await this.studiesRepository.findOne({
+      where: { id: studyId },
+    });
+    if (!study) throw new NotFoundException('해당 스터디를 찾을 수 없습니다.');
 
-    if (!studyUser) throw new NotFoundException('스터디에 없는 유저입니다.');
+    await this.hostCheck({ studyId, userId });
+
+    const updatedStudy = await this.studiesRepository.save({
+      ...study,
+      ...updateStudyDto,
+    });
+
+    return updatedStudy;
+  }
+
+  async outStudy({ userId, studyId }: IStudiesServiceOutStudy): Promise<void> {
+    const studyUser = await this.guestCheck({ studyId, userId });
 
     await this.studyUsersRepository.delete({ id: studyUser.id });
   }
@@ -106,16 +120,12 @@ export class StudiesService {
   }: IStudiesServiceForcedExitStudy): Promise<void> {
     const { guestId } = forcedExitStudyDto;
 
-    const hostStudyUser = await this.findUserStudy({ userId: hostId, studyId });
-    if (!hostStudyUser.isHost)
-      throw new HttpException('강퇴할 권한이 없습니다.', 401);
+    await this.hostCheck({ studyId, userId: hostId });
 
-    const guestStudyUser = await this.findUserStudy({
-      userId: guestId,
+    const guestStudyUser = await this.guestCheck({
       studyId,
+      userId: guestId,
     });
-    if (!guestStudyUser)
-      throw new NotFoundException('스터디에 없는 유저입니다.');
 
     await this.studyUsersRepository.delete({ id: guestStudyUser.id });
   }
@@ -186,5 +196,27 @@ export class StudiesService {
       .getMany();
 
     return studies;
+  }
+
+  async hostCheck({ userId, studyId }): Promise<StudyUser> {
+    const studyUser = await this.findUserStudy({ userId, studyId });
+
+    if (!studyUser)
+      throw new NotFoundException('해당 유저 혹은 스터디를 찾을 수 없습니다.');
+
+    if (!studyUser.isHost) throw new ForbiddenException('권한이 없습니다.');
+
+    return studyUser;
+  }
+
+  async guestCheck({ userId, studyId }): Promise<StudyUser> {
+    const studyUser = await this.findUserStudy({ userId, studyId });
+
+    if (!studyUser)
+      throw new NotFoundException('해당 유저 혹은 스터디를 찾을 수 없습니다.');
+
+    if (studyUser.isHost) throw new ForbiddenException('권한이 없습니다.');
+
+    return studyUser;
   }
 }
