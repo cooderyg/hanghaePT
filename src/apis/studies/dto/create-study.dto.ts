@@ -7,6 +7,10 @@ export class CreateStudyDto {
   title: string;
 
   @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @IsNotEmpty()
   @IsNumber()
   maxCount: number;
 

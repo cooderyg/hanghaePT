@@ -7,6 +7,10 @@ export class UpdateStudyDto {
   title?: string;
 
   @IsNotEmpty()
+  @IsString()
+  content?: string;
+
+  @IsNotEmpty()
   @IsNumber()
   maxCount?: number;
 
