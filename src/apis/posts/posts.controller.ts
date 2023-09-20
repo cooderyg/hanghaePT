@@ -14,7 +14,7 @@ import { Post as EPost } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
-import { PageReqDto } from 'src/commons/dto/page-req.dto';
+import { PageReqDto, searchReqDto } from 'src/commons/dto/page-req.dto';
 import { UpdateResult } from 'typeorm';
 
 @Controller('api/posts')
@@ -29,6 +29,15 @@ export class PostsController {
     return posts;
   }
 
+  // 게시글 검색
+  @Get('search')
+  async searchPosts(@Query() searchReqDto: searchReqDto): Promise<EPost[]> {
+    const posts = await this.postsService.searchPosts({
+      searchReqDto,
+    });
+    return posts;
+  }
+
   // 게시글 개별 조회
   @Get('/:postId')
   async getPost(
@@ -39,7 +48,7 @@ export class PostsController {
     return post;
   }
 
-  // 게시글 생성
+  // 게시글 생성 (질문 공유하기)
   @UseGuards(AccessAuthGuard)
   @Post()
   async createPost(
