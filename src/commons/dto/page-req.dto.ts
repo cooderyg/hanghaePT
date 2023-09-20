@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsInt, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
 import { TOPIC } from 'src/apis/questions/entities/question.entity';
 
 export class PageReqDto {
@@ -22,4 +22,9 @@ export class countReqDto {
   @Transform((param) => Number(param.value))
   @IsInt()
   count?: number = 10;
+}
+
+export class searchReqDto extends PageReqDto {
+  @IsString()
+  keyword: string;
 }

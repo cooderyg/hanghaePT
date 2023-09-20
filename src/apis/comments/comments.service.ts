@@ -51,15 +51,13 @@ export class CommentsService {
     postId,
     createPostCommentDto,
   }: IPostCommentCreateComment): Promise<Comment> {
-    const { comment } = createPostCommentDto;
-
     const post = await this.postsService.getPost({ postId });
     if (!post) throw new NotFoundException('게시글을 찾을 수 없습니다.');
 
     const commentPost = await this.commentsRepository.save({
       user: { id: userId },
       post: { id: postId },
-      comment,
+      ...createPostCommentDto,
     });
     return commentPost;
   }
