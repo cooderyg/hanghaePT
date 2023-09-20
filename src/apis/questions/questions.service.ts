@@ -11,8 +11,10 @@ import { ChatgptsService } from '../chatgpts/chatgpts.service';
 import {
   IQuestionServiceContinueQuestion,
   IQuestionServiceDeleteQuestion,
+  IQuestionServiceFilterQuestion,
   IQuestionServiceFindAllQuestion,
   IQuestionServiceFindQuestion,
+  IQuestionServiceSearchQuestion,
   IQuestionsServiceCreateQuestion,
 } from './interfaces/questions-service.interface';
 import { QuestionDetailsService } from '../questionDetails/question-details.service';
@@ -27,22 +29,96 @@ export class QuestionsService {
     private readonly questionDetailsService: QuestionDetailsService,
   ) {}
 
+  // 질문 검색
+  async searchQuestion({
+    keyword,
+  }: IQuestionServiceSearchQuestion): Promise<Question[]> {
+    const questions = await this.questionsRepository
+      .createQueryBuilder('question')
+      .select(['question.title'])
+      .where('question.title LIKE :keyword', { keyword: `%${keyword}%` })
+      .getMany();
+
+    if (questions.length === 0) {
+      throw new HttpException(
+        '검색 결과가 존재하지 않습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return questions;
+  }
+
+  // 라이브러리 검색
+  async searchLibraryQuestion({
+    keyword,
+  }: IQuestionServiceSearchQuestion): Promise<Question[]> {
+    const libraries = await this.questionsRepository
+      .createQueryBuilder('question')
+      .select(['question.library'])
+      .where('question.library LIKE :keyword', { keyword: `%${keyword}%` })
+      .getMany();
+
+    if (libraries.length === 0) {
+      throw new HttpException(
+        '라이브러리가 결과가 존재하지 않습니다.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return libraries;
+  }
+
+  // 질문 필터
+  async filterQuestion({ topic, type }: IQuestionServiceFilterQuestion) {
+    const queryBuilder =
+      this.questionsRepository.createQueryBuilder('question');
+
+    if (topic) {
+      queryBuilder.andWhere('question.topic = :topic', { topic });
+    }
+    if (type) {
+      queryBuilder.andWhere('question.type = :type', { type });
+    }
+
+    const questions = await queryBuilder.getMany();
+
+    if (questions.length === 0) {
+      throw new HttpException(
+        '선택 옵션에 해당하는 질문이 없습니다.',
+        HttpStatus.GONE,
+      );
+    }
+
+    return questions;
+  }
+
   // 질문하기
   async continueQuestion({
     questionId,
     userId,
     continueQuestionDto,
   }: IQuestionServiceContinueQuestion): Promise<string> {
-    const { query } = continueQuestionDto;
+    const { query, type, topic, library } = continueQuestionDto;
 
     const question = await this.findQuestion({ questionId, userId });
+    if (!question.title) {
+      question.title = query;
+    }
+
+    question.type = type;
+    question.topic = topic;
+    if (library) {
+      question.library = library;
+    }
+    await this.questionsRepository.save(question);
 
     const questionDetails =
       await this.questionDetailsService.findQuestionDetail(questionId);
-
     if (questionDetails.length > 20) {
       throw new ForbiddenException('최대 질문 개수가 초과되었습니다.');
     }
+
     const chatgptAnswer = await this.chatgptsService.createChatgpt(
       questionDetails,
       continueQuestionDto,
@@ -92,7 +168,7 @@ export class QuestionsService {
     return questions;
   }
 
-  // 질문 조회
+  // 질문 1개 조회
   async findQuestion({
     userId,
     questionId,
