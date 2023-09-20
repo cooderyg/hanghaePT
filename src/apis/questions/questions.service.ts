@@ -35,7 +35,7 @@ export class QuestionsService {
   }: IQuestionServiceContinueQuestion): Promise<string> {
     const { query } = continueQuestionDto;
 
-    const question = await this.findQuestion({ questionId, userId });
+    await this.findQuestion({ questionId, userId });
 
     const questionDetails =
       await this.questionDetailsService.findQuestionDetail(questionId);
