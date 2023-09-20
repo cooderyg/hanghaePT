@@ -3,7 +3,16 @@ import {
   SocialUserAfterAuth,
   UserAfterAuth,
 } from './../../commons/decorators/user.decorator';
-import { Controller, Post, Get, Res, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Res,
+  UseGuards,
+  Body,
+  Delete,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Response } from 'express';
 import {
   AccessAuthGuard,
@@ -56,5 +65,16 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken);
     //Todo: 개발완료 시 cookie부분 삭제
     return { accessToken, refreshToken };
+  }
+
+  @UseGuards(AccessAuthGuard)
+  @Delete('logout')
+  async logout(@Res() res: Response, @User() user: UserAfterAuth) {
+    console.log('???????');
+    console.log(user);
+    if (!user)
+      throw new UnauthorizedException('로그아웃 할 수 없는 상태입니다.');
+
+    res.clearCookie('accessToken').status(200).json({ result: true });
   }
 }
