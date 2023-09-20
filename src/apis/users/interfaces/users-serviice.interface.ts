@@ -4,6 +4,10 @@ export interface IUserServiceFindByEmail {
   email: string;
 }
 
+export interface IUserServiceFindById {
+  id: string;
+}
+
 export interface IUsersServiceCreateUser {
   createUserDto: CreateUserDto;
 }
