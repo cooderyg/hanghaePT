@@ -21,7 +21,10 @@ export class UsersService {
   }
 
   async findById({ id }: IUserServiceFindById): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id } });
+    return await this.usersRepository.findOne({
+      where: { id },
+      select: ['id', 'email', 'name', 'profileImgUrl'],
+    });
   }
 
   async createUser({ createUserDto }: IUsersServiceCreateUser): Promise<User> {
