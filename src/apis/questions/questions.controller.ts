@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
-import { Question } from './entities/question.entity';
+import { Question, TOPIC, TYPE } from './entities/question.entity';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
 import { PageReqDto, countReqDto } from 'src/commons/dto/page-req.dto';
@@ -19,6 +19,26 @@ import { MessageResDto } from 'src/commons/dto/message-res.dto';
 @Controller('/api/questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
+
+  // 질문 검색
+  @Post('search')
+  async searchQuestion(@Body('keyword') keyword: string): Promise<Question[]> {
+    return await this.questionsService.searchQuestion({ keyword });
+  }
+
+  // 라이브러리 검색
+  @Post('search/library')
+  async searchLibraryQuestion(
+    @Body('keyword') keyword: string,
+  ): Promise<Question[]> {
+    return await this.questionsService.searchLibraryQuestion({ keyword });
+  }
+
+  // 질문 필터
+  @Post('filter')
+  async filterQuestion(@Body('topic') topic: TOPIC, @Body('type') type: TYPE) {
+    return this.questionsService.filterQuestion({ topic, type });
+  }
 
   // 질문하기
   @UseGuards(AccessAuthGuard)
@@ -71,7 +91,7 @@ export class QuestionsController {
     return questions;
   }
 
-  // 질문 조회
+  // 질문 1개 조회
   @UseGuards(AccessAuthGuard)
   @Get(':questionId')
   async findQuestion(

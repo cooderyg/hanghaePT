@@ -3,7 +3,6 @@ import { TYPE } from '../entities/question.entity';
 import { TOPIC } from '../entities/question.entity';
 
 export class ContinueQuestionDto {
-  @IsNotEmpty()
   @IsString()
   title: string;
 
