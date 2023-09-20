@@ -9,26 +9,40 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
-import { CreateQuestionDto } from './dto/create-question.dto';
 import { Question } from './entities/question.entity';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
 import { PageReqDto, countReqDto } from 'src/commons/dto/page-req.dto';
+import { ContinueQuestionDto } from './dto/continue-question.dto';
+import { MessageResDto } from 'src/commons/dto/message-res.dto';
 
 @Controller('/api/questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
-  // 질문 생성
+  // 질문하기
+  @UseGuards(AccessAuthGuard)
+  @Post(':questionId')
+  async ContinueQuestionDto(
+    @User() user: UserAfterAuth,
+    @Param('questionId') questionId: string,
+    @Body() continueQuestionDto: ContinueQuestionDto,
+  ): Promise<string> {
+    const answer = await this.questionsService.continueQuestion({
+      userId: user.id,
+      questionId,
+      continueQuestionDto,
+    });
+
+    return answer;
+  }
+
+  // 질문 방 생성
   @UseGuards(AccessAuthGuard)
   @Post()
-  async createQuestion(
-    @User() user: UserAfterAuth,
-    @Body() createQuestionDto: CreateQuestionDto,
-  ): Promise<Question> {
+  async createQuestion(@User() user: UserAfterAuth): Promise<Question> {
     return await this.questionsService.createQuestion({
       userId: user.id,
-      createQuestionDto,
     });
   }
 
@@ -70,13 +84,13 @@ export class QuestionsController {
     });
   }
 
-  // 질문 삭제 (유저가드 추가 필요)
+  // 질문 삭제
   @UseGuards(AccessAuthGuard)
   @Delete(':questionId')
   async deleteQuestion(
     @User() user: UserAfterAuth,
     @Param('questionId') questionId: string,
-  ): Promise<void> {
+  ): Promise<MessageResDto> {
     return await this.questionsService.deleteQuestion({
       userId: user.id,
       questionId,

@@ -21,6 +21,6 @@ export class QuestionDetail {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Question, (question) => question.questionsDetails)
+  @ManyToOne(() => Question, (question) => question.questionDetails)
   question: Question;
 }

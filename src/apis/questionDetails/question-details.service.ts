@@ -5,6 +5,7 @@ import { QuestionDetail } from './entities/questionDetail.entity';
 import { Repository } from 'typeorm';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
+import { IQuestionDetailsServiceCreateQuestionDetails } from './interfaces/question-details-service.interface';
 
 @Injectable()
 export class QuestionDetailsService {
@@ -14,7 +15,7 @@ export class QuestionDetailsService {
   ) {}
 
   // 이전질문을 조회해서 가져오기
-  async findQuestionDetail(questionId: string) {
+  async findQuestionDetail(questionId: string): Promise<QuestionDetail[]> {
     const questions = await this.questionDetailsRepository.find({
       where: { question: { id: questionId } },
     });
@@ -22,11 +23,18 @@ export class QuestionDetailsService {
     return questions;
   }
 
-  async createQuestionDetail(questionId, query, chatgptAnswer) {
+  // 이전 질문 저장히기
+  async createQuestionDetail({
+    questionId,
+    query,
+    chatgptAnswer,
+  }: IQuestionDetailsServiceCreateQuestionDetails): Promise<void> {
+    const answer = JSON.parse(chatgptAnswer).message;
+
     const createQuestion = await this.questionDetailsRepository.save({
-      questionId,
+      question: { id: questionId },
       query,
-      chatgptAnswer,
+      answer,
     });
     return;
   }

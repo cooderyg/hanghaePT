@@ -37,16 +37,16 @@ export class Question {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   library: string;
 
-  @Column({ type: 'enum', enum: TOPIC })
+  @Column({ type: 'enum', enum: TOPIC, nullable: true })
   topic: TOPIC;
 
-  @Column({ type: 'enum', enum: TYPE })
+  @Column({ type: 'enum', enum: TYPE, nullable: true })
   type: TYPE;
 
   @CreateDateColumn()
@@ -60,5 +60,5 @@ export class Question {
     (questionDetail) => questionDetail.question,
     { cascade: true },
   )
-  questionsDetails: QuestionDetail[];
+  questionDetails: QuestionDetail[];
 }

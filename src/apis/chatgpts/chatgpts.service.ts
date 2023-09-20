@@ -4,12 +4,13 @@ import { IChatgptServiceCreateChatgpt } from './interfaces/chatgpts-service.inte
 
 @Injectable()
 export class ChatgptsService {
-  async createChatgpt(questionDetails, createQuestionDto) {
+  async createChatgpt(questionDetails, continueQuestionDto) {
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const { library, topic, type } = createQuestionDto;
+    // 라이브러리, 주제, 질문유형
+    const { library, topic, type } = continueQuestionDto;
 
     let messages: IChatgptServiceCreateChatgpt[] = [
       { role: 'system', content: 'You are a helpful assistant.' },
@@ -24,7 +25,7 @@ export class ChatgptsService {
       messages.push({ role: 'assistant', content: q.answer });
     });
 
-    messages.push({ role: 'user', content: createQuestionDto.query });
+    messages.push({ role: 'user', content: continueQuestionDto.query });
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',

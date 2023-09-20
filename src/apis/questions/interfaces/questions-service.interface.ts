@@ -1,14 +1,15 @@
 import { PageReqDto } from 'src/commons/dto/page-req.dto';
-import { CreateQuestionDto } from '../dto/create-question.dto';
+import { ContinueQuestionDto } from '../dto/continue-question.dto';
 
 export interface IQuestionsServiceCreateQuestion {
-  createQuestionDto: CreateQuestionDto;
+  continueQuestionDto: ContinueQuestionDto;
   userId: string;
 }
 
 export interface IQuestionServiceFindAllQuestion {
   pageReqDto: PageReqDto;
 }
+
 export interface IQuestionServiceFindQuestion {
   userId: string;
   questionId: string;
@@ -17,4 +18,10 @@ export interface IQuestionServiceFindQuestion {
 export interface IQuestionServiceDeleteQuestion {
   userId: string;
   questionId: string;
+}
+
+export interface IQuestionServiceContinueQuestion {
+  userId: string;
+  questionId: string;
+  continueQuestionDto: ContinueQuestionDto;
 }
