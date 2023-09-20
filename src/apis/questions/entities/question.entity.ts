@@ -1,11 +1,13 @@
+import { QuestionDetail } from 'src/apis/questionDetails/entities/questionDetail.entity';
 import { User } from 'src/apis/users/entities/user.entity';
+
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 export enum TOPIC {
@@ -52,4 +54,11 @@ export class Question {
 
   @ManyToOne(() => User, (user) => user.questions, { onDelete: 'CASCADE' })
   user: User;
+
+  @OneToMany(
+    () => QuestionDetail,
+    (questionDetail) => questionDetail.question,
+    { cascade: true },
+  )
+  questionsDetails: QuestionDetail[];
 }

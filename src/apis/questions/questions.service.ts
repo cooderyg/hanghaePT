@@ -10,6 +10,7 @@ import {
   IQuestionServiceFindQuestion,
   IQuestionsServiceCreateQuestion,
 } from './interfaces/questions-service.interface';
+import { QuestionDetailsService } from '../questionDetails/question-details.service';
 
 @Injectable()
 export class QuestionsService {
@@ -17,7 +18,10 @@ export class QuestionsService {
     @InjectRepository(Question)
     private readonly questionsRepository: Repository<Question>,
     private readonly chatgptsService: ChatgptsService,
+    private readonly questionDetailsService: QuestionDetailsService,
   ) {}
+
+  async updateQuestion() {}
 
   // 질문 생성
   async createQuestion({
@@ -38,10 +42,7 @@ export class QuestionsService {
 
     return await this.questionsRepository.save({
       user: { id: userId },
-      title: createQuestionDto.title,
-      library: createQuestionDto.library,
-      topic: createQuestionDto.topic,
-      type: createQuestionDto.type,
+      ...createQuestionDto,
     });
   }
 

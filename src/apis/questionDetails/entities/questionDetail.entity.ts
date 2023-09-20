@@ -1,9 +1,10 @@
+import { Question } from 'src/apis/questions/entities/question.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -12,11 +13,14 @@ export class QuestionDetail {
   id: string;
 
   @Column({ type: 'text' })
-  question: string;
+  query: string;
 
   @Column({ type: 'text' })
   answer: string;
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Question, (question) => question.questionsDetails)
+  question: Question;
 }

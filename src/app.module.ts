@@ -11,7 +11,7 @@ import { StudiesModule } from './apis/studies/studies.module';
 import { ChatgptsModule } from './apis/chatgpts/chatgpts.module';
 import { QuestionsModule } from './apis/questions/questions.module';
 import { CommentsModule } from './apis/comments/comments.module';
-import { QuestionDetailsModule } from './question-details/question-details.module';
+import { QuestionDetailsModule } from './apis/questionDetails/question-details.module';
 
 @Module({
   imports: [
@@ -19,6 +19,7 @@ import { QuestionDetailsModule } from './question-details/question-details.modul
     PostsModule,
     CommentsModule,
     QuestionsModule,
+    QuestionDetailsModule,
     ChatgptsModule,
     UsersModule,
     StudiesModule,
