@@ -1,8 +1,18 @@
+import { PageReqDto } from 'src/commons/dto/page-req.dto';
 import { CreatePostDto } from '../dto/create-post.dto';
 
 export interface IPostsServiceCreatePost {
   userId: string;
   createPostDto: CreatePostDto;
+}
+
+export interface IPostsServiceGetAllPost {
+  pageReqDto: PageReqDto;
+}
+
+export interface IPostsServiceGetPostPagination {
+  pageReqDto: PageReqDto;
+  postId: string;
 }
 
 export interface IPostsServiceGetPost {

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './entities/comment.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { PostsService } from '../posts/posts.service';
 import {
   IPostCommentCreateComment,
@@ -21,8 +21,11 @@ export class CommentsService {
   // 댓글 전체 조회
   async getAllPostComment({
     postId,
+    pageReqDto,
   }: IPostCommentGetAllComment): Promise<Comment[]> {
-    return await this.commentsRepository
+    const { page, size } = pageReqDto;
+
+    const comments = await this.commentsRepository
       .createQueryBuilder('comment')
       .select([
         'comment.id',
@@ -35,7 +38,11 @@ export class CommentsService {
       .leftJoin('comment.user', 'user')
       .where('comment.post.id = :postId', { postId })
       .orderBy({ 'comment.createdAt': 'ASC' })
+      .take(size)
+      .skip((page - 1) * size)
       .getMany();
+
+    return comments;
   }
 
   // 댓글 생성
@@ -90,7 +97,7 @@ export class CommentsService {
   async deletePostComment({
     commentId,
     userId,
-  }: IPostCommentDeleteComment): Promise<Comment> {
+  }: IPostCommentDeleteComment): Promise<UpdateResult> {
     const comment = await this.commentsRepository
       .createQueryBuilder('comment')
       .select([
@@ -109,7 +116,8 @@ export class CommentsService {
     if (comment.user.id !== userId)
       throw new NotFoundException('권한이 없습니다.');
 
-    await this.commentsRepository.remove(comment);
-    return comment;
+    return await this.commentsRepository.softDelete({
+      id: commentId,
+    });
   }
 }

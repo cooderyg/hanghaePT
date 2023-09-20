@@ -7,27 +7,35 @@ import {
   Put,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { Post as EPost } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
+import { PageReqDto } from 'src/commons/dto/page-req.dto';
+import { UpdateResult } from 'typeorm';
 
 @Controller('api/posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
+
   // 게시글 전체조회
   @Get()
-  async getAllPost(): Promise<EPost[]> {
-    const post = await this.postsService.getAllPost({});
-    return post;
+  async getAllPost(@Query() pageReqDto: PageReqDto): Promise<EPost[]> {
+    const posts = await this.postsService.getAllPost({ pageReqDto });
+
+    return posts;
   }
 
   // 게시글 개별 조회
   @Get('/:postId')
-  async getPost(@Param('postId') postId: string): Promise<EPost> {
-    const post = await this.postsService.getPost({ postId });
+  async getPost(
+    @Param('postId') postId: string,
+    @Query() pageReqDto: PageReqDto,
+  ): Promise<EPost> {
+    const post = await this.postsService.getPostDetail({ postId, pageReqDto });
     return post;
   }
 
@@ -67,7 +75,7 @@ export class PostsController {
   async deletePost(
     @Param('postId') postId: string,
     @User() user: UserAfterAuth,
-  ): Promise<EPost> {
+  ): Promise<UpdateResult> {
     const post = await this.postsService.deletePost({
       postId,
       userId: user.id,
