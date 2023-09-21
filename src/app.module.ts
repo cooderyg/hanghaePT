@@ -12,6 +12,7 @@ import { ChatgptsModule } from './apis/chatgpts/chatgpts.module';
 import { QuestionsModule } from './apis/questions/questions.module';
 import { CommentsModule } from './apis/comments/comments.module';
 import { QuestionDetailsModule } from './apis/questionDetails/question-details.module';
+import { MessagesModule } from './apis/messages/messages.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { QuestionDetailsModule } from './apis/questionDetails/question-details.m
     QuestionDetailsModule,
     ChatgptsModule,
     UsersModule,
+    MessagesModule,
     StudiesModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({

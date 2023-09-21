@@ -1,4 +1,5 @@
 import { Comment } from 'src/apis/comments/entities/comment.entity';
+import { Message } from 'src/apis/messages/entities/message.entity';
 import { Question } from 'src/apis/questions/entities/question.entity';
 import { StudyUser } from 'src/apis/studies/entities/studyUser.entity';
 import {
@@ -44,4 +45,10 @@ export class User {
 
   @OneToMany(() => StudyUser, (studyUser) => studyUser.user)
   studyUsers: StudyUser[];
+
+  @OneToMany(() => Message, (message) => message.sender)
+  sendMessages: Message[];
+
+  @OneToMany(() => Message, (message) => message.receiver)
+  receiveMessages: Message[];
 }
