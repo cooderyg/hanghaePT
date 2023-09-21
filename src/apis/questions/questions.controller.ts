@@ -26,17 +26,12 @@ export class QuestionsController {
     return await this.questionsService.searchQuestion({ keyword });
   }
 
-  // 라이브러리 검색
-  @Post('search/library')
-  async searchLibraryQuestion(
-    @Body('keyword') keyword: string,
-  ): Promise<Question[]> {
-    return await this.questionsService.searchLibraryQuestion({ keyword });
-  }
-
   // 질문 필터
   @Post('filter')
-  async filterQuestion(@Body('topic') topic: TOPIC, @Body('type') type: TYPE) {
+  async filterQuestion(
+    @Body('topic') topic: TOPIC,
+    @Body('type') type: TYPE,
+  ): Promise<Question[]> {
     return this.questionsService.filterQuestion({ topic, type });
   }
 

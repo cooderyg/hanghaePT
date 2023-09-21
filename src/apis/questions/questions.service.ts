@@ -35,8 +35,10 @@ export class QuestionsService {
   }: IQuestionServiceSearchQuestion): Promise<Question[]> {
     const questions = await this.questionsRepository
       .createQueryBuilder('question')
-      .select(['question.title'])
-      .where('question.title LIKE :keyword', { keyword: `%${keyword}%` })
+      .select(['question.title', 'question.library'])
+      .where('question.title LIKE :keyword OR question.library LIKE :keyword', {
+        keyword: `%${keyword}%`,
+      })
       .getMany();
 
     if (questions.length === 0) {
@@ -49,28 +51,11 @@ export class QuestionsService {
     return questions;
   }
 
-  // 라이브러리 검색
-  async searchLibraryQuestion({
-    keyword,
-  }: IQuestionServiceSearchQuestion): Promise<Question[]> {
-    const libraries = await this.questionsRepository
-      .createQueryBuilder('question')
-      .select(['question.library'])
-      .where('question.library LIKE :keyword', { keyword: `%${keyword}%` })
-      .getMany();
-
-    if (libraries.length === 0) {
-      throw new HttpException(
-        '라이브러리가 결과가 존재하지 않습니다.',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    return libraries;
-  }
-
   // 질문 필터
-  async filterQuestion({ topic, type }: IQuestionServiceFilterQuestion) {
+  async filterQuestion({
+    topic,
+    type,
+  }: IQuestionServiceFilterQuestion): Promise<Question[]> {
     const queryBuilder =
       this.questionsRepository.createQueryBuilder('question');
 
