@@ -39,7 +39,7 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken);
     res.cookie('accessToken', accessToken);
 
-    return { accessToken, refreshToken };
+    res.redirect('http://localhost:3001');
   }
 
   @UseGuards(RefreshAuthGuard)
@@ -53,7 +53,7 @@ export class AuthController {
     });
     //Todo: 개발완료 시 cookie부분 삭제
     res.cookie('accessToken', accessToken);
-    return { accessToken };
+    return res.redirect('http://localhost:3001');
   }
 
   @Post('login')
@@ -63,7 +63,6 @@ export class AuthController {
     });
     res.cookie('accessToken', accessToken);
     res.cookie('refreshToken', refreshToken);
-    //Todo: 개발완료 시 cookie부분 삭제
     return { accessToken, refreshToken };
   }
 
@@ -74,6 +73,6 @@ export class AuthController {
       throw new UnauthorizedException('로그아웃 할 수 없는 상태입니다.');
     res.clearCookie('refreshToken');
     res.clearCookie('accessToken');
-    res.status(200).json({ result: true });
+    return { result: true };
   }
 }

@@ -5,7 +5,13 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => {
+        if (!req.cookies.refreshToken) throw new UnauthorizedException();
+
+        const cookie = req.cookies.refreshToken;
+        const refreshToken = cookie.replace('accessToken=', '');
+        return refreshToken;
+      },
       secretOrKey: process.env.ACCESS_SECRET_KEY,
     });
   }
