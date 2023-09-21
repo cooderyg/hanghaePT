@@ -53,7 +53,7 @@ export class AuthController {
     });
     //Todo: 개발완료 시 cookie부분 삭제
     res.cookie('accessToken', accessToken);
-    return res.redirect('http://localhost:3001');
+    return { result: true };
   }
 
   @Post('login')
