@@ -70,11 +70,10 @@ export class AuthController {
   @UseGuards(AccessAuthGuard)
   @Delete('logout')
   async logout(@Res() res: Response, @User() user: UserAfterAuth) {
-    console.log('???????');
-    console.log(user);
     if (!user)
       throw new UnauthorizedException('로그아웃 할 수 없는 상태입니다.');
-
-    res.clearCookie('accessToken').status(200).json({ result: true });
+    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken');
+    res.status(200).json({ result: true });
   }
 }
