@@ -20,12 +20,6 @@ import { MessageResDto } from 'src/commons/dto/message-res.dto';
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
-  // // 질문 검색
-  // @Post('search')
-  // async searchQuestion(@Body('keyword') keyword: string): Promise<Question[]> {
-  //   return await this.questionsService.searchQuestion({ keyword });
-  // }
-
   // 질문 전체조회 & 검색
   @Get()
   async findAllQuestion(

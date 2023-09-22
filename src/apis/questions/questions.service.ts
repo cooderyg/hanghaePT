@@ -4,7 +4,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Question } from './entities/question.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatgptsService } from '../chatgpts/chatgpts.service';
@@ -19,6 +19,7 @@ import {
 } from './interfaces/questions-service.interface';
 import { QuestionDetailsService } from '../questionDetails/question-details.service';
 import { MessageResDto } from 'src/commons/dto/message-res.dto';
+import { title } from 'process';
 
 @Injectable()
 export class QuestionsService {
@@ -29,79 +30,32 @@ export class QuestionsService {
     private readonly questionDetailsService: QuestionDetailsService,
   ) {}
 
-  // // 질문 검색
-  // async searchQuestion({
-  //   keyword,
-  // }: IQuestionServiceSearchQuestion): Promise<Question[]> {
-  //   const questions = await this.questionsRepository
-  //     .createQueryBuilder('question')
-  //     .select([
-  //       'question.title',
-  //       'question.library',
-  //       'question.topic',
-  //       'question.type',
-  //     ])
-  //     .where(
-  //       'question.title LIKE :keyword OR question.library LIKE :keyword OR question.topic LIKE :keyword OR question.type LIKE :keyword',
-  //       {
-  //         keyword: `%${keyword}%`,
-  //       },
-  //     )
-  //     .getMany();
-
-  //   if (questions.length === 0) {
-  //     throw new HttpException(
-  //       '검색 결과가 존재하지 않습니다.',
-  //       HttpStatus.NOT_FOUND,
-  //     );
-  //   }
-
-  //   return questions;
-  // }
-
-  // // 모든 질문 조회 (페이지네이션)
-  // async findAllQuestion({
-  //   pageReqDto,
-  // }: IQuestionServiceFindAllQuestion): Promise<Question[]> {
-  //   const { page, size } = pageReqDto;
-
-  //   const questions = await this.questionsRepository.findAndCount({
-  //     order: { createdAt: 'DESC' },
-  //     take: size,
-  //     skip: (page - 1) * size,
-  //   });
-
-  //   return questions;
-  // }
-
   // 모든 질문 조회 (페이지네이션)
   async findAllQuestion({
     searchReqDto,
   }: IQuestionServiceFindAllQuestion): Promise<[Question[], number]> {
     const { page, size, keyword } = searchReqDto;
-    let query = this.questionsRepository
-      .createQueryBuilder('question')
-      .select([
-        'question.title',
-        'question.library',
-        'question.topic',
-        'question.type',
-      ])
-      .orderBy('question.createdAt', 'DESC')
-      .take(size)
-      .skip((page - 1) * size);
-
+    let questions: [Question[], number];
     if (keyword) {
-      query = query.where(
-        'question.title LIKE :keyword OR question.library LIKE :keyword OR question.topic LIKE :keyword OR question.type LIKE :keyword',
-        {
-          keyword: `%${keyword}%`,
-        },
-      );
+      questions = await this.questionsRepository.findAndCount({
+        where: [
+          { title: Like(`%${keyword}%`) },
+          { library: Like(`%${keyword}%`) },
+          { topic: Like(`%${keyword}%` as any) },
+          { type: Like(`%${keyword}%` as any) },
+        ],
+        order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
+      });
+    } else {
+      questions = await this.questionsRepository.findAndCount({
+        order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
+      });
     }
-
-    const [questions, total] = await query.getManyAndCount();
-    return [questions, total];
+    return questions;
   }
 
   // 질문하기
