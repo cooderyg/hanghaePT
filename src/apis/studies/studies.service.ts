@@ -176,16 +176,15 @@ export class StudiesService {
   }
 
   async findStudies({
-    topicReqDto,
+    searchReqDto,
   }: IStudiesServiceFindStudies): Promise<[Study[], number]> {
-    const { page, size, topic } = topicReqDto;
+    const { page, size, keyword } = searchReqDto;
     let studies: [Study[], number];
-    if (topic) {
+    if (keyword) {
       studies = await this.studiesRepository.findAndCount({
         where: [
-          { topic: topic },
-          { content: Like(`%${topic}%`) },
-          { title: Like(`%${topic}%`) },
+          { content: Like(`%${keyword}%`) },
+          { title: Like(`%${keyword}%`) },
         ],
         order: { createdAt: 'DESC' },
         take: size,

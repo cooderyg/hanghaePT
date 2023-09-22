@@ -14,7 +14,7 @@ export class PageReqDto {
 
 export class TopicReqDto extends PageReqDto {
   @IsEnum(TOPIC)
-  topic?: TOPIC;
+  topic: TOPIC;
 }
 
 export class countReqDto {
