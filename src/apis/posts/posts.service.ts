@@ -24,8 +24,9 @@ export class PostsService {
   }: IPostsServiceGetAllPost): Promise<[Post[], number]> {
     const { page, size, keyword } = searchReqDto;
 
+    if (keyword === undefined) throw new NotFoundException('검색어 누락');
     // 키워드 없이 전체조회
-    if (keyword === undefined) {
+    if (keyword === '') {
       const posts = await this.postsRepository
         .createQueryBuilder('post')
         .select([
