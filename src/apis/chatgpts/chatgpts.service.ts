@@ -88,7 +88,7 @@ export class ChatgptsService {
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages,
-      max_tokens: 100,
+      max_tokens: 2000,
     });
 
     const responseData = {
