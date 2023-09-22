@@ -1,4 +1,4 @@
-import { PageReqDto } from 'src/commons/dto/page-req.dto';
+import { SearchReqDto } from 'src/commons/dto/page-req.dto';
 import { ContinueQuestionDto } from '../dto/continue-question.dto';
 import { TOPIC, TYPE } from '../entities/question.entity';
 
@@ -8,7 +8,7 @@ export interface IQuestionsServiceCreateQuestion {
 }
 
 export interface IQuestionServiceFindAllQuestion {
-  pageReqDto: PageReqDto;
+  searchReqDto?: SearchReqDto;
 }
 
 export interface IQuestionServiceFindQuestion {

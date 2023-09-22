@@ -4,7 +4,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Question } from './entities/question.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatgptsService } from '../chatgpts/chatgpts.service';
@@ -19,6 +19,7 @@ import {
 } from './interfaces/questions-service.interface';
 import { QuestionDetailsService } from '../questionDetails/question-details.service';
 import { MessageResDto } from 'src/commons/dto/message-res.dto';
+import { title } from 'process';
 
 @Injectable()
 export class QuestionsService {
@@ -29,52 +30,29 @@ export class QuestionsService {
     private readonly questionDetailsService: QuestionDetailsService,
   ) {}
 
-  // 질문 검색
-  async searchQuestion({
-    keyword,
-  }: IQuestionServiceSearchQuestion): Promise<Question[]> {
-    const questions = await this.questionsRepository
-      .createQueryBuilder('question')
-      .select(['question.title', 'question.library'])
-      .where('question.title LIKE :keyword OR question.library LIKE :keyword', {
-        keyword: `%${keyword}%`,
-      })
-      .getMany();
-
-    if (questions.length === 0) {
-      throw new HttpException(
-        '검색 결과가 존재하지 않습니다.',
-        HttpStatus.NOT_FOUND,
-      );
+  // 질문 전체조회 & 검색
+  async findAllQuestion({
+    searchReqDto,
+  }: IQuestionServiceFindAllQuestion): Promise<[Question[], number]> {
+    const { page, size, keyword } = searchReqDto;
+    let questions: [Question[], number];
+    if (keyword) {
+      questions = await this.questionsRepository.findAndCount({
+        where: [
+          { title: Like(`%${keyword}%`) },
+          { library: Like(`%${keyword}%`) },
+        ],
+        order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
+      });
+    } else {
+      questions = await this.questionsRepository.findAndCount({
+        order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
+      });
     }
-
-    return questions;
-  }
-
-  // 질문 필터
-  async filterQuestion({
-    topic,
-    type,
-  }: IQuestionServiceFilterQuestion): Promise<Question[]> {
-    const queryBuilder =
-      this.questionsRepository.createQueryBuilder('question');
-
-    if (topic) {
-      queryBuilder.andWhere('question.topic = :topic', { topic });
-    }
-    if (type) {
-      queryBuilder.andWhere('question.type = :type', { type });
-    }
-
-    const questions = await queryBuilder.getMany();
-
-    if (questions.length === 0) {
-      throw new HttpException(
-        '선택 옵션에 해당하는 질문이 없습니다.',
-        HttpStatus.GONE,
-      );
-    }
-
     return questions;
   }
 
@@ -125,22 +103,7 @@ export class QuestionsService {
     });
   }
 
-  // 모든 질문 조회 (페이지네이션)
-  async findAllQuestion({
-    pageReqDto,
-  }: IQuestionServiceFindAllQuestion): Promise<Question[]> {
-    const { page, size } = pageReqDto;
-
-    const questions = await this.questionsRepository.find({
-      order: { createdAt: 'DESC' },
-      take: size,
-      skip: (page - 1) * size,
-    });
-
-    return questions;
-  }
-
-  // 최근 질문 10개 조회
+  // 최근 질문 15개 조회
   async findRecentQuestion({ userId, countReqDto }): Promise<Question[]> {
     const { count } = countReqDto;
 

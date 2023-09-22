@@ -20,7 +20,7 @@ export class TopicReqDto extends PageReqDto {
 export class countReqDto {
   @Transform((param) => Number(param.value))
   @IsInt()
-  count?: number = 10;
+  count?: number = 15;
 }
 
 export class SearchReqDto extends PageReqDto {

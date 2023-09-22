@@ -12,7 +12,7 @@ import { QuestionsService } from './questions.service';
 import { Question, TOPIC, TYPE } from './entities/question.entity';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
-import { PageReqDto, countReqDto } from 'src/commons/dto/page-req.dto';
+import { SearchReqDto, countReqDto } from 'src/commons/dto/page-req.dto';
 import { ContinueQuestionDto } from './dto/continue-question.dto';
 import { MessageResDto } from 'src/commons/dto/message-res.dto';
 
@@ -20,19 +20,16 @@ import { MessageResDto } from 'src/commons/dto/message-res.dto';
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
-  // 질문 검색
-  @Post('search')
-  async searchQuestion(@Body('keyword') keyword: string): Promise<Question[]> {
-    return await this.questionsService.searchQuestion({ keyword });
-  }
+  // 질문 전체조회 & 검색
+  @Get()
+  async findAllQuestion(
+    @Query() searchReqDto: SearchReqDto,
+  ): Promise<[Question[], number]> {
+    const questions = await this.questionsService.findAllQuestion({
+      searchReqDto,
+    });
 
-  // 질문 필터
-  @Post('filter')
-  async filterQuestion(
-    @Body('topic') topic: TOPIC,
-    @Body('type') type: TYPE,
-  ): Promise<Question[]> {
-    return this.questionsService.filterQuestion({ topic, type });
+    return questions;
   }
 
   // 질문하기
@@ -61,17 +58,7 @@ export class QuestionsController {
     });
   }
 
-  // 모든 질문 조회 (페이지 네이션)
-  @Get()
-  async findAllQuestion(@Query() pageReqDto: PageReqDto): Promise<Question[]> {
-    const questions = await this.questionsService.findAllQuestion({
-      pageReqDto,
-    });
-
-    return questions;
-  }
-
-  // 최근 질문 10개 조회
+  // 최근 질문 15개 조회
   @UseGuards(AccessAuthGuard)
   @Get('recent')
   async findRecentQuestion(
