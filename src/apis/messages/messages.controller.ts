@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { MessagesService } from './messages.service';
@@ -13,6 +14,7 @@ import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Message } from './entities/message.entity';
 import { MessageResDto } from 'src/commons/dto/message-res.dto';
+import { PageReqDto } from 'src/commons/dto/page-req.dto';
 
 @Controller('api/messages')
 export class MessagesController {
@@ -29,20 +31,28 @@ export class MessagesController {
 
   @UseGuards(AccessAuthGuard)
   @Get('sender')
-  async findSendMessages(@User() user: UserAfterAuth): Promise<Message[]> {
+  async findSendMessages(
+    @Query() pageReqDto: PageReqDto,
+    @User() user: UserAfterAuth,
+  ): Promise<[Message[], number]> {
     const messages = await this.messagesService.findMessages({
       userId: user.id,
       isSender: true,
+      pageReqDto,
     });
     return messages;
   }
 
   @UseGuards(AccessAuthGuard)
   @Get('receiver')
-  async findReceiveMessages(@User() user: UserAfterAuth): Promise<Message[]> {
+  async findReceiveMessages(
+    @Query() pageReqDto: PageReqDto,
+    @User() user: UserAfterAuth,
+  ): Promise<[Message[], number]> {
     const messages = await this.messagesService.findMessages({
       userId: user.id,
       isSender: false,
+      pageReqDto,
     });
 
     return messages;

@@ -1,3 +1,4 @@
+import { PageReqDto } from 'src/commons/dto/page-req.dto';
 import { CreateMessageDto } from '../dto/create-message.dto';
 
 export interface IMessagesServiceFindMessage {
@@ -8,6 +9,7 @@ export interface IMessagesServiceFindMessage {
 export interface IMessagesServiceFindMessages {
   userId: string;
   isSender: boolean;
+  pageReqDto: PageReqDto;
 }
 
 export interface IMessagesServiceCreateMessage {

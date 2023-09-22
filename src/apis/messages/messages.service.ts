@@ -40,19 +40,27 @@ export class MessagesService {
   async findMessages({
     userId,
     isSender,
-  }: IMessagesServiceFindMessages): Promise<Message[]> {
-    let messages: Message[];
+    pageReqDto,
+  }: IMessagesServiceFindMessages): Promise<[Message[], number]> {
+    const { page, size } = pageReqDto;
+
+    let messages: [Message[], number];
     if (isSender) {
-      messages = await this.messagesRepository.find({
+      messages = await this.messagesRepository.findAndCount({
         where: { sender: { id: userId }, senderDelete: false },
         order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
       });
     } else {
-      messages = await this.messagesRepository.find({
+      messages = await this.messagesRepository.findAndCount({
         where: { receiver: { id: userId }, receiverDelete: false },
         order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
       });
     }
+
     return messages;
   }
 
