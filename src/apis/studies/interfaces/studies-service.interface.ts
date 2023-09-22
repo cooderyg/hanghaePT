@@ -1,4 +1,8 @@
-import { PageReqDto, TopicReqDto } from 'src/commons/dto/page-req.dto';
+import {
+  PageReqDto,
+  SearchReqDto,
+  TopicReqDto,
+} from 'src/commons/dto/page-req.dto';
 import { CreateStudyDto } from '../dto/create-study.dto';
 import { ForcedExitStudyDto } from '../dto/forcedExit-study.dto';
 import { UpdateStudyDto } from '../dto/update-study.dto';
@@ -41,7 +45,7 @@ export interface IStudiesServiceFindUserStudy {
 }
 
 export interface IStudiesServiceFindStudies {
-  topicReqDto: TopicReqDto;
+  searchReqDto: SearchReqDto;
 }
 
 export interface IStudiesServiceFindStudiesByTopic {
