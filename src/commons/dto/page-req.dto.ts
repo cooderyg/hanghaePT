@@ -24,7 +24,7 @@ export class countReqDto {
   count?: number = 10;
 }
 
-export class searchReqDto extends PageReqDto {
+export class SearchReqDto extends PageReqDto {
   @IsString()
-  keyword: string;
+  keyword?: string;
 }

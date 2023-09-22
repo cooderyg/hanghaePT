@@ -14,27 +14,18 @@ import { Post as EPost } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
-import { PageReqDto, searchReqDto } from 'src/commons/dto/page-req.dto';
+import { PageReqDto, SearchReqDto } from 'src/commons/dto/page-req.dto';
 import { UpdateResult } from 'typeorm';
 
 @Controller('api/posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  // 게시글 전체조회
+  // 게시글 전체조회 & 검색
   @Get()
-  async getAllPost(@Query() pageReqDto: PageReqDto): Promise<EPost[]> {
-    const posts = await this.postsService.getAllPost({ pageReqDto });
+  async getAllPost(@Query() searchReqDto: SearchReqDto): Promise<EPost[]> {
+    const posts = await this.postsService.getAllPost({ searchReqDto });
 
-    return posts;
-  }
-
-  // 게시글 검색
-  @Get('search')
-  async searchPosts(@Query() searchReqDto: searchReqDto): Promise<EPost[]> {
-    const posts = await this.postsService.searchPosts({
-      searchReqDto,
-    });
     return posts;
   }
 

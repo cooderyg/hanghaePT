@@ -1,4 +1,4 @@
-import { PageReqDto, searchReqDto } from 'src/commons/dto/page-req.dto';
+import { PageReqDto, SearchReqDto } from 'src/commons/dto/page-req.dto';
 import { CreatePostDto } from '../dto/create-post.dto';
 
 export interface IPostsServiceCreatePost {
@@ -7,7 +7,7 @@ export interface IPostsServiceCreatePost {
 }
 
 export interface IPostsServiceGetAllPost {
-  pageReqDto: PageReqDto;
+  searchReqDto?: SearchReqDto;
 }
 
 export interface IPostsServiceGetPostPagination {
@@ -28,8 +28,4 @@ export interface IPostServicePutPost {
 export interface IPostServiceDeletePost {
   userId: string;
   postId: string;
-}
-
-export interface IPostsServiceSearch {
-  searchReqDto: searchReqDto;
 }

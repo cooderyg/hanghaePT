@@ -9,7 +9,6 @@ import {
   IPostsServiceGetAllPost,
   IPostsServiceGetPost,
   IPostsServiceGetPostPagination,
-  IPostsServiceSearch,
 } from './interfaces/post-service.interfaces';
 
 @Injectable()
@@ -19,16 +18,57 @@ export class PostsService {
     private readonly postsRepository: Repository<Post>,
   ) {}
 
-  // 게시글 전체 조회
-  async getAllPost({ pageReqDto }: IPostsServiceGetAllPost): Promise<Post[]> {
-    const { page, size } = pageReqDto;
+  // 게시글 전체 조회 & 검색
+  async getAllPost({ searchReqDto }: IPostsServiceGetAllPost): Promise<Post[]> {
+    const { page, size, keyword } = searchReqDto;
 
-    const posts = await this.postsRepository.find({
-      order: { createdAt: 'DESC' },
-      take: size,
-      skip: (page - 1) * size,
-    });
-    return posts;
+    // 키워드 없이 전체조회
+    if (keyword === '') {
+      const posts = await this.postsRepository
+        .createQueryBuilder('post')
+        .select([
+          'post.id',
+          'post.title',
+          'post.content',
+          'post.createdAt',
+          'post.updatedAt',
+          'user.id',
+          'user.name',
+          'user.profileImgUrl',
+        ])
+        .leftJoin('post.user', 'user')
+        .orderBy('post.createdAt', 'DESC')
+        .take(size)
+        .skip((page - 1) * size)
+        .getMany();
+
+      return posts;
+    }
+
+    // 검색하여 조회
+    if (keyword) {
+      const results = await this.postsRepository
+        .createQueryBuilder('post')
+        .select([
+          'post.id',
+          'post.title',
+          'post.content',
+          'post.createdAt',
+          'post.updatedAt',
+          'user.id',
+          'user.name',
+          'user.profileImgUrl',
+        ])
+        .leftJoin('post.user', 'user')
+        .where('post.title like :keyword', { keyword: `%${keyword}%` })
+        .orWhere('post.content like :keyword', { keyword: `%${keyword}%` })
+        .orderBy('post.createdAt', 'DESC')
+        .take(size)
+        .skip((page - 1) * size)
+        .getMany();
+
+      return results;
+    }
   }
 
   // 게시글 개별 조회
@@ -42,38 +82,13 @@ export class PostsService {
         'post.createdAt',
         'post.updatedAt',
         'user.id',
+        'user.profileImgUrl',
       ])
       .leftJoin('post.user', 'user')
       .where('post.id = :postId', { postId })
       .getOne();
     if (!post) throw new NotFoundException('게시글 조회 실패');
     return post;
-  }
-
-  // 게시글 검색
-  async searchPosts({ searchReqDto }: IPostsServiceSearch): Promise<Post[]> {
-    const { keyword, page, size } = searchReqDto;
-
-    console.log('get요정이 들어갔는지 확인용');
-
-    const results = await this.postsRepository
-      .createQueryBuilder('post')
-      .select([
-        'post.id',
-        'post.title',
-        'post.content',
-        'post.createdAt',
-        'post.updatedAt',
-      ])
-      .where('post.title like :keyword', { keyword: `%${keyword}%` })
-      .orWhere('post.content like :keyword', { keyword: `%${keyword}%` })
-      .take(size)
-      .skip((page - 1) * size)
-      .getMany();
-
-    console.log('검색이 되었는가?:', results);
-
-    return results;
   }
 
   // 게시글 디테일 페이지 조회
