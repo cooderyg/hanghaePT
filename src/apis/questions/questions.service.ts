@@ -41,8 +41,6 @@ export class QuestionsService {
         where: [
           { title: Like(`%${keyword}%`) },
           { library: Like(`%${keyword}%`) },
-          { topic: Like(`%${keyword}%` as any) },
-          { type: Like(`%${keyword}%` as any) },
         ],
         order: { createdAt: 'DESC' },
         take: size,
