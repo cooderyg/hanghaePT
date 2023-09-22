@@ -32,7 +32,6 @@ export class PostsService {
           'post.content',
           'post.createdAt',
           'post.updatedAt',
-          'user.id',
           'user.name',
           'user.profileImgUrl',
         ])
@@ -55,7 +54,6 @@ export class PostsService {
           'post.content',
           'post.createdAt',
           'post.updatedAt',
-          'user.id',
           'user.name',
           'user.profileImgUrl',
         ])

@@ -34,6 +34,7 @@ export class CommentsService {
         'comment.updatedAt',
         'user.id',
         'user.name',
+        'user.profileImgUrl',
       ])
       .leftJoin('comment.user', 'user')
       .where('comment.post.id = :postId', { postId })
