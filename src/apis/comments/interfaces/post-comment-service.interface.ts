@@ -3,7 +3,6 @@ import { CreatePostCommentDto } from '../dto/create-post-comment.dto';
 
 export class IPostCommentGetAllComment {
   postId: string;
-  pageReqDto: PageReqDto;
 }
 
 export class IPostCommentCreateComment {

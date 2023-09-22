@@ -15,7 +15,6 @@ import { CreatePostCommentDto } from './dto/create-post-comment.dto';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { UpdateResult } from 'typeorm';
-import { PageReqDto } from 'src/commons/dto/page-req.dto';
 
 @Controller('api/:postId/comments')
 export class CommentsController {
@@ -23,13 +22,9 @@ export class CommentsController {
 
   // 댓글 조회
   @Get()
-  async getAllPostComment(
-    @Param('postId') postId: string,
-    @Query() pageReqDto: PageReqDto,
-  ): Promise<Comment[]> {
+  async getAllPostComment(@Param('postId') postId: string): Promise<Comment[]> {
     const comment = await this.commentsService.getAllPostComment({
       postId,
-      pageReqDto,
     });
     return comment;
   }

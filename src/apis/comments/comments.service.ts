@@ -21,10 +21,7 @@ export class CommentsService {
   // 댓글 전체 조회
   async getAllPostComment({
     postId,
-    pageReqDto,
   }: IPostCommentGetAllComment): Promise<Comment[]> {
-    const { page, size } = pageReqDto;
-
     const comments = await this.commentsRepository
       .createQueryBuilder('comment')
       .select([
@@ -39,8 +36,6 @@ export class CommentsService {
       .leftJoin('comment.user', 'user')
       .where('comment.post.id = :postId', { postId })
       .orderBy({ 'comment.createdAt': 'ASC' })
-      .take(size)
-      .skip((page - 1) * size)
       .getMany();
 
     return comments;
