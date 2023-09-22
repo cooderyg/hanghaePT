@@ -41,7 +41,7 @@ export interface IStudiesServiceFindUserStudy {
 }
 
 export interface IStudiesServiceFindStudies {
-  pageReqDto: PageReqDto;
+  topicReqDto: TopicReqDto;
 }
 
 export interface IStudiesServiceFindStudiesByTopic {

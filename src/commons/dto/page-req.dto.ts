@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsString } from 'class-validator';
 import { TOPIC } from 'src/apis/questions/entities/question.entity';
 
 export class PageReqDto {
@@ -13,9 +13,8 @@ export class PageReqDto {
 }
 
 export class TopicReqDto extends PageReqDto {
-  @IsNotEmpty()
   @IsEnum(TOPIC)
-  topic: TOPIC;
+  topic?: TOPIC;
 }
 
 export class countReqDto {

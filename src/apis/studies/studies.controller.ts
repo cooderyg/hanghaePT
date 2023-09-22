@@ -99,22 +99,24 @@ export class StudiesController {
   }
 
   @Get()
-  async findStudies(@Query() pageReqDto: PageReqDto): Promise<Study[]> {
-    const studies = await this.studiesService.findStudies({ pageReqDto });
-
-    return studies;
-  }
-
-  @Get('topics')
-  async findStudiesByTopic(
+  async findStudies(
     @Query() topicReqDto: TopicReqDto,
-  ): Promise<Study[]> {
-    const studies = await this.studiesService.findStudiesByTopic({
-      topicReqDto,
-    });
+  ): Promise<[Study[], number]> {
+    const studies = await this.studiesService.findStudies({ topicReqDto });
 
     return studies;
   }
+
+  // @Get('topics')
+  // async findStudiesByTopic(
+  //   @Query() topicReqDto: TopicReqDto,
+  // ): Promise<Study[]> {
+  //   const studies = await this.studiesService.findStudiesByTopic({
+  //     topicReqDto,
+  //   });
+
+  //   return studies;
+  // }
 
   @UseGuards(AccessAuthGuard)
   @Get('mypages')
