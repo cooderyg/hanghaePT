@@ -3,8 +3,8 @@ import { TYPE } from '../entities/question.entity';
 import { TOPIC } from '../entities/question.entity';
 
 export class ContinueQuestionDto {
-  @IsString()
-  title: string;
+  // @IsString()
+  // title: string;
 
   @IsString()
   library: string;
