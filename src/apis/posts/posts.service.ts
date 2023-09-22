@@ -39,15 +39,11 @@ export class PostsService {
         ])
         .leftJoin('post.user', 'user')
         .orderBy('post.createdAt', 'DESC')
-        .getMany();
+        .take(size)
+        .skip((page - 1) * size)
+        .getManyAndCount();
 
-      const count = await this.postsRepository.count({
-        order: { createdAt: 'DESC' },
-        take: size,
-        skip: (page - 1) * size,
-      });
-
-      return [posts, count];
+      return posts;
     }
     // 검색하여 조회
     else if (keyword) {
@@ -65,19 +61,11 @@ export class PostsService {
         .where('post.title like :keyword', { keyword: `%${keyword}%` })
         .orWhere('post.content like :keyword', { keyword: `%${keyword}%` })
         .orderBy('post.createdAt', 'DESC')
-        .getMany();
+        .take(size)
+        .skip((page - 1) * size)
+        .getManyAndCount();
 
-      const count = await this.postsRepository.count({
-        where: [
-          { title: Like(`%${keyword}%`) },
-          { content: Like(`%${keyword}%`) },
-        ],
-        order: { createdAt: 'DESC' },
-        take: size,
-        skip: (page - 1) * size,
-      });
-
-      return [posts, count];
+      return posts;
     }
   }
 
