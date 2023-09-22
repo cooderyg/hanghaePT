@@ -23,10 +23,14 @@ export class PostsController {
 
   // 게시글 전체조회 & 검색
   @Get()
-  async getAllPost(@Query() searchReqDto: SearchReqDto): Promise<EPost[]> {
-    const posts = await this.postsService.getAllPost({ searchReqDto });
+  async getAllPost(
+    @Query() searchReqDto: SearchReqDto,
+  ): Promise<[EPost[], number]> {
+    const [posts, count] = await this.postsService.getAllPost({
+      searchReqDto,
+    });
 
-    return posts;
+    return [posts, count];
   }
 
   // 게시글 개별 조회
