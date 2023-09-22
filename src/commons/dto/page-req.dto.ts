@@ -9,7 +9,7 @@ export class PageReqDto {
 
   @Transform((param) => Number(param.value))
   @IsInt()
-  size?: number = 20;
+  size?: number = 10;
 }
 
 export class TopicReqDto extends PageReqDto {
