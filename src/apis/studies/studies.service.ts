@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Study } from './entities/study.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Like, Repository } from 'typeorm';
 import { StudyUser } from './entities/studyUser.entity';
 import {
   IStudiesServiceCreateStudy,
@@ -176,15 +176,28 @@ export class StudiesService {
   }
 
   async findStudies({
-    pageReqDto,
-  }: IStudiesServiceFindStudies): Promise<Study[]> {
-    const { page, size } = pageReqDto;
-
-    const studies = await this.studiesRepository.find({
-      order: { createdAt: 'DESC' },
-      take: size,
-      skip: (page - 1) * size,
-    });
+    topicReqDto,
+  }: IStudiesServiceFindStudies): Promise<[Study[], number]> {
+    const { page, size, topic } = topicReqDto;
+    let studies: [Study[], number];
+    if (topic) {
+      studies = await this.studiesRepository.findAndCount({
+        where: [
+          { topic: topic },
+          { content: Like(`%${topic}%`) },
+          { title: Like(`%${topic}%`) },
+        ],
+        order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
+      });
+    } else {
+      studies = await this.studiesRepository.findAndCount({
+        order: { createdAt: 'DESC' },
+        take: size,
+        skip: (page - 1) * size,
+      });
+    }
 
     return studies;
   }
