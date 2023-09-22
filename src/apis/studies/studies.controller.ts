@@ -16,7 +16,7 @@ import { AccessAuthGuard } from '../auth/guard/auth.guard';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { ForcedExitStudyDto } from './dto/forcedExit-study.dto';
 import { Study } from './entities/study.entity';
-import { PageReqDto, TopicReqDto } from 'src/commons/dto/page-req.dto';
+import { PageReqDto, SearchReqDto } from 'src/commons/dto/page-req.dto';
 import { UpdateStudyDto } from './dto/update-study.dto';
 
 @Controller('api/studies')
@@ -100,9 +100,9 @@ export class StudiesController {
 
   @Get()
   async findStudies(
-    @Query() topicReqDto: TopicReqDto,
+    @Query() searchReqDto: SearchReqDto,
   ): Promise<[Study[], number]> {
-    const studies = await this.studiesService.findStudies({ topicReqDto });
+    const studies = await this.studiesService.findStudies({ searchReqDto });
 
     return studies;
   }
