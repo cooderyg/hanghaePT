@@ -37,7 +37,7 @@ import { MessagesModule } from './apis/messages/messages.module';
       synchronize: true, // 개발환경에서만 사용
       logging: true,
       namingStrategy: new SnakeNamingStrategy(),
-      timezone: 'UTC',
+      timezone: 'Asia/Seoul',
     }),
     QuestionDetailsModule,
   ],
