@@ -30,7 +30,7 @@ export class QuestionsService {
     private readonly questionDetailsService: QuestionDetailsService,
   ) {}
 
-  // 모든 질문 조회 (페이지네이션)
+  // 질문 전체조회 & 검색
   async findAllQuestion({
     searchReqDto,
   }: IQuestionServiceFindAllQuestion): Promise<[Question[], number]> {
