@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsInt, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { TOPIC } from 'src/apis/questions/entities/question.entity';
 
 export class PageReqDto {
@@ -24,6 +24,7 @@ export class countReqDto {
 }
 
 export class SearchReqDto extends PageReqDto {
+  @IsOptional()
   @IsString()
   keyword?: string;
 }
