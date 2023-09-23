@@ -88,6 +88,7 @@ export class ChatgptsService {
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo-16k',
       messages,
+      temperature: 0.5,
     });
 
     const responseData = {
