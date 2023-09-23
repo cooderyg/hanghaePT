@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { TYPE } from '../entities/question.entity';
-import { TOPIC } from '../entities/question.entity';
+import { TOPIC, TYPE } from 'src/commons/enum/enum';
 
 export class ContinueQuestionDto {
   // @IsString()

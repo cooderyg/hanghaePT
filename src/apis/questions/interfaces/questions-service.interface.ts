@@ -1,6 +1,6 @@
 import { SearchReqDto } from 'src/commons/dto/page-req.dto';
 import { ContinueQuestionDto } from '../dto/continue-question.dto';
-import { TOPIC, TYPE } from '../entities/question.entity';
+import { TOPIC, TYPE } from 'src/commons/enum/enum';
 
 export interface IQuestionsServiceCreateQuestion {
   continueQuestionDto: ContinueQuestionDto;

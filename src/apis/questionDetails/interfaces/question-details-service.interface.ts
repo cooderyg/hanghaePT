@@ -1,5 +1,6 @@
+import { ContinueQuestionDto } from './../../questions/dto/continue-question.dto';
 export interface IQuestionDetailsServiceCreateQuestionDetails {
   questionId: string;
-  query: string;
   chatgptAnswer: string;
+  continueQuestionDto: ContinueQuestionDto;
 }

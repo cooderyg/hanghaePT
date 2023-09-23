@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
-import { TOPIC } from 'src/apis/questions/entities/question.entity';
+import { TOPIC } from '../enum/enum';
 
 export class PageReqDto {
   @Transform((param) => Number(param.value))

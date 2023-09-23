@@ -1,3 +1,4 @@
+import { ContinueQuestionDto } from './dto/continue-question.dto';
 import {
   ForbiddenException,
   HttpException,
@@ -65,10 +66,8 @@ export class QuestionsService {
     const { query, type, topic, library } = continueQuestionDto;
 
     const question = await this.findQuestion({ questionId, userId });
-    if (!question.title) {
-      question.title = query;
-    }
 
+    question.title = query;
     question.type = type;
     question.topic = topic;
     if (library) {
@@ -89,8 +88,8 @@ export class QuestionsService {
 
     await this.questionDetailsService.createQuestionDetail({
       questionId,
-      query,
       chatgptAnswer,
+      continueQuestionDto,
     });
 
     return chatgptAnswer;
