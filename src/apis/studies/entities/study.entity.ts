@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { StudyUser } from './studyUser.entity';
 import { TOPIC } from 'src/commons/enum/enum';
+import { Applicant } from './applicant.entity';
 
 @Entity()
 export class Study {
@@ -37,4 +38,7 @@ export class Study {
 
   @OneToMany(() => StudyUser, (studyUser) => studyUser.study, { cascade: true })
   studyUsers: StudyUser[];
+
+  @OneToMany(() => Applicant, (applicant) => applicant.study, { cascade: true })
+  applicants: Applicant[];
 }

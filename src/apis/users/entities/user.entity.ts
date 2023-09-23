@@ -1,6 +1,7 @@
 import { Comment } from 'src/apis/comments/entities/comment.entity';
 import { Message } from 'src/apis/messages/entities/message.entity';
 import { Question } from 'src/apis/questions/entities/question.entity';
+import { Applicant } from 'src/apis/studies/entities/applicant.entity';
 import { StudyUser } from 'src/apis/studies/entities/studyUser.entity';
 import {
   Column,
@@ -51,4 +52,7 @@ export class User {
 
   @OneToMany(() => Message, (message) => message.receiver)
   receiveMessages: Message[];
+
+  @OneToMany(() => Applicant, (applicant) => applicant.user, { cascade: true })
+  applicants: Applicant[];
 }
