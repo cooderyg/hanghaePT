@@ -42,7 +42,6 @@ export class StudiesController {
     @User() user: UserAfterAuth,
     @Param() { guestId, studyId },
   ): Promise<MessageResDto> {
-    console.log(studyId);
     await this.studiesService.joinStudy({ studyId, hostId: user.id, guestId });
 
     return { message: '스터디 참여가 완료되었습니다.' };
