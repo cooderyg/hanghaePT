@@ -20,6 +20,7 @@ import {
   IStudiesServiceJoinStudy,
   IStudiesServiceOutStudy,
 } from './interfaces/studies-service.interface';
+import { Applicant } from './entities/applicant.entity';
 
 @Injectable()
 export class StudiesService {
@@ -28,6 +29,8 @@ export class StudiesService {
     private readonly studiesRepository: Repository<Study>,
     @InjectRepository(StudyUser)
     private readonly studyUsersRepository: Repository<StudyUser>,
+    @InjectRepository(Applicant)
+    private readonly applicantsRepository: Repository<Applicant>,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -155,6 +158,7 @@ export class StudiesService {
         'user.id',
         'user.name',
         'user.email',
+        'user.profileImgUrl',
       ])
       .leftJoin('study.studyUsers', 'studyUser')
       .leftJoin('studyUser.user', 'user')
@@ -181,21 +185,56 @@ export class StudiesService {
     const { page, size, keyword } = searchReqDto;
     let studies: [Study[], number];
     if (keyword) {
-      studies = await this.studiesRepository.findAndCount({
-        where: [
-          { content: Like(`%${keyword}%`) },
-          { title: Like(`%${keyword}%`) },
-        ],
-        order: { createdAt: 'DESC' },
-        take: size,
-        skip: (page - 1) * size,
-      });
+      console.log('워드안', keyword);
+      studies = await this.studiesRepository
+        .createQueryBuilder('study')
+        .select([
+          'study.id',
+          'study.title',
+          'study.content',
+          'study.maxCount',
+          'study.joinCount',
+          'study.topic',
+          'study.createdAt',
+          'studyUser.id',
+          'studyUser.isHost',
+          'user.id',
+          'user.name',
+          'user.email',
+          'user.profileImgUrl',
+        ])
+        .leftJoin('study.studyUsers', 'studyUser')
+        .leftJoin('studyUser.user', 'user')
+        .where('study.content like :keyword', { keyword: `%${keyword}%` })
+        .orWhere('study.title like :keyword', { keyword: `%${keyword}%` })
+        .orderBy('study.createdAt', 'DESC')
+        .take(size)
+        .skip((page - 1) * size)
+        .getManyAndCount();
     } else {
-      studies = await this.studiesRepository.findAndCount({
-        order: { createdAt: 'DESC' },
-        take: size,
-        skip: (page - 1) * size,
-      });
+      studies = await this.studiesRepository
+        .createQueryBuilder('study')
+        .select([
+          'study.id',
+          'study.title',
+          'study.content',
+          'study.maxCount',
+          'study.joinCount',
+          'study.topic',
+          'study.createdAt',
+          'studyUser.id',
+          'studyUser.isHost',
+          'user.id',
+          'user.name',
+          'user.email',
+          'user.profileImgUrl',
+        ])
+        .leftJoin('study.studyUsers', 'studyUser')
+        .leftJoin('studyUser.user', 'user')
+        .orderBy('study.createdAt', 'DESC')
+        .take(size)
+        .skip((page - 1) * size)
+        .getManyAndCount();
     }
 
     return studies;
@@ -232,6 +271,7 @@ export class StudiesService {
         'studyUser.id',
         'user.id',
         'user.name',
+        'user.profileImgUrl',
       ])
       .leftJoin('study.studyUsers', 'studyUser')
       .leftJoin('studyUser.user', 'user')
