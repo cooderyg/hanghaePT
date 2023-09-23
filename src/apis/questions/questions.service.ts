@@ -114,7 +114,7 @@ export class QuestionsService {
     const { count } = countReqDto;
 
     const questions = await this.questionsRepository.find({
-      order: { createdAt: 'DESC' },
+      order: { createdAt: 'ASC' },
       take: count,
       where: { user: { id: userId } },
     });
