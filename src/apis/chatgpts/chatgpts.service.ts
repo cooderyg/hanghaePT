@@ -11,15 +11,11 @@ export class ChatgptsService {
 
     // 라이브러리, 주제, 질문유형
     const { library, topic, type } = continueQuestionDto;
-    console.log('요거슨토픽이여~~~~~', topic);
 
     const messages: IChatgptServiceCreateChatgpt[] = [
       { role: 'system', content: `You are an expert in ${type}.` },
       { role: 'system', content: `You are a master of ${topic}.` },
-      {
-        role: 'system',
-        content: `you have to answer about ${library},${topic},${type}`,
-      },
+      { role: 'system', content: `You are a master of ${library}.` },
       {
         role: 'system',
         content: `You should answer very kindly, going step by step with examples.
@@ -47,7 +43,7 @@ export class ChatgptsService {
       },
       {
         role: 'system',
-        content: `When refusing to answer, you must reply, 'I can only answer questions about programming.'`,
+        content: `When refusing to answer, you must reply, '프로그래밍에 대한 답변만 가능합니다.'`,
       },
       {
         role: 'system',
@@ -89,7 +85,10 @@ export class ChatgptsService {
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo-16k',
       messages,
-      temperature: 0.5,
+
+      temperature: 0.7,
+      max_tokens: 1000,
+
     });
 
     const responseData = {

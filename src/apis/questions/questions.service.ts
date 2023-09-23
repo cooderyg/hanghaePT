@@ -4,7 +4,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { Like, Repository } from 'typeorm';
+import { IsNull, Like, Repository } from 'typeorm';
 import { Question } from './entities/question.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatgptsService } from '../chatgpts/chatgpts.service';
@@ -98,6 +98,13 @@ export class QuestionsService {
 
   // 질문 방 생성
   async createQuestion({ userId }): Promise<Question> {
+    const exNullQuestion = await this.questionsRepository.find({
+      where: { user: { id: userId }, title: IsNull() },
+    });
+    console.log(exNullQuestion);
+    if (exNullQuestion.length !== 0)
+      throw new ForbiddenException('질문을 추가로 생성할 수 없습니다.');
+
     return await this.questionsRepository.save({
       user: { id: userId },
     });
