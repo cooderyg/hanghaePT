@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
-import { Question, TOPIC, TYPE } from './entities/question.entity';
+import { Question } from './entities/question.entity';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { AccessAuthGuard } from '../auth/guard/auth.guard';
 import { SearchReqDto, countReqDto } from 'src/commons/dto/page-req.dto';

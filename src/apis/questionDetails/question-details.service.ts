@@ -33,18 +33,17 @@ export class QuestionDetailsService {
     return questions;
   }
 
-  // 이전 질문 저장히기
+  // 질문 저장히기
   async createQuestionDetail({
     questionId,
-    query,
     chatgptAnswer,
+    continueQuestionDto,
   }: IQuestionDetailsServiceCreateQuestionDetails): Promise<void> {
     const answer = JSON.parse(chatgptAnswer).message;
-
     const createQuestion = await this.questionDetailsRepository.save({
       question: { id: questionId },
-      query,
       answer,
+      ...continueQuestionDto,
     });
     return;
   }

@@ -1,4 +1,5 @@
 import { Question } from 'src/apis/questions/entities/question.entity';
+import { TOPIC, TYPE } from 'src/commons/enum/enum';
 import {
   Column,
   CreateDateColumn,
@@ -17,6 +18,15 @@ export class QuestionDetail {
 
   @Column({ type: 'text' })
   answer: string;
+
+  @Column({ nullable: true })
+  library: string;
+
+  @Column({ type: 'enum', enum: TOPIC })
+  topic: TOPIC;
+
+  @Column({ type: 'enum', enum: TYPE })
+  type: TYPE;
 
   @CreateDateColumn()
   createdAt: Date;

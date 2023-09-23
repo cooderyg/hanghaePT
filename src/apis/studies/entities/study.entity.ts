@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { StudyUser } from './studyUser.entity';
-import { TOPIC } from 'src/apis/questions/entities/question.entity';
+import { TOPIC } from 'src/commons/enum/enum';
 
 @Entity()
 export class Study {
