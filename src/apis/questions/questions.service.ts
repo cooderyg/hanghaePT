@@ -124,6 +124,7 @@ export class QuestionsService {
     const question = await this.questionsRepository.findOne({
       where: { id: questionId },
       relations: ['user', 'questionDetails'],
+      order: { questionDetails: { createdAt: 'ASC' } },
     });
 
     if (!question) {

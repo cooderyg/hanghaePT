@@ -16,9 +16,19 @@ export class QuestionDetailsService {
 
   // 이전질문을 조회해서 가져오기
   async findQuestionDetail(questionId: string): Promise<QuestionDetail[]> {
-    const questions = await this.questionDetailsRepository.find({
-      where: { question: { id: questionId } },
-    });
+    const questions = await this.questionDetailsRepository
+      .createQueryBuilder('questionDetail')
+      .select([
+        'questionDetail.id',
+        'questionDetail.query',
+        'questionDetail.answer',
+        'questionDetail.createdAt',
+        'question.id',
+      ])
+      .where('questionDetail.question.id = :questionId', { questionId })
+      .leftJoin('questionDetail.question', 'question')
+      .orderBy('questionDetail.createdAt', 'ASC')
+      .getMany();
 
     return questions;
   }
