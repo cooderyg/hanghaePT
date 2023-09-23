@@ -19,7 +19,7 @@ export enum TOPIC {
   NEST = 'NESTJS',
   NODE = 'NODEJS',
   SPRING = 'SPRING',
-  CS = 'CS',
+  CS = 'COMPUTER SCIENCE',
 }
 
 export enum TYPE {
