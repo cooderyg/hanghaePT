@@ -8,6 +8,7 @@ export interface IQuestionsServiceCreateQuestion {
 }
 
 export interface IQuestionServiceFindAllQuestion {
+  userId: string;
   searchReqDto?: SearchReqDto;
 }
 

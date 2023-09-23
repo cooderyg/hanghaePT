@@ -32,7 +32,8 @@ export class QuestionsService {
   ) {}
 
   // 질문 전체조회 & 검색
-  async findAllQuestion({
+  async findMyQuestion({
+    userId,
     searchReqDto,
   }: IQuestionServiceFindAllQuestion): Promise<[Question[], number]> {
     const { page, size, keyword } = searchReqDto;
@@ -40,8 +41,8 @@ export class QuestionsService {
     if (keyword) {
       questions = await this.questionsRepository.findAndCount({
         where: [
-          { title: Like(`%${keyword}%`) },
-          { library: Like(`%${keyword}%`) },
+          { title: Like(`%${keyword}%`), user: { id: userId } },
+          { library: Like(`%${keyword}%`), user: { id: userId } },
         ],
         order: { createdAt: 'DESC' },
         take: size,
@@ -52,6 +53,7 @@ export class QuestionsService {
         order: { createdAt: 'DESC' },
         take: size,
         skip: (page - 1) * size,
+        where: { user: { id: userId } },
       });
     }
     return questions;

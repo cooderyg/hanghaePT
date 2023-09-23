@@ -21,11 +21,14 @@ export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
   // 질문 전체조회 & 검색
+  @UseGuards(AccessAuthGuard)
   @Get()
-  async findAllQuestion(
+  async findMyQuestion(
     @Query() searchReqDto: SearchReqDto,
+    @User() user: UserAfterAuth,
   ): Promise<[Question[], number]> {
-    const questions = await this.questionsService.findAllQuestion({
+    const questions = await this.questionsService.findMyQuestion({
+      userId: user.id,
       searchReqDto,
     });
 
