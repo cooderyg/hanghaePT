@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Study } from './entities/study.entity';
-import { DataSource, Like, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { StudyUser } from './entities/studyUser.entity';
 import {
   IStudiesServiceCreateStudy,
@@ -51,18 +51,11 @@ export class StudiesService {
 
   async joinStudy({
     studyId,
-    guestId,
-    hostId,
+    userId,
   }: IStudiesServiceJoinStudy): Promise<void> {
-    const hostStudyUser = await this.findUserStudy({ studyId, userId: hostId });
-    if (!hostStudyUser)
-      throw new NotFoundException('해당하는 스터디가 없습니다.');
-
-    await this.hostCheck({ studyId, userId: hostId });
-
     const isExistStduyUser = await this.findUserStudy({
       studyId,
-      userId: guestId,
+      userId,
     });
 
     if (isExistStduyUser)
@@ -86,7 +79,7 @@ export class StudiesService {
 
       await queryRunner.manager.insert(StudyUser, {
         study: { id: studyId },
-        user: { id: guestId },
+        user: { id: userId },
         isHost: false,
       });
 
@@ -301,7 +294,8 @@ export class StudiesService {
     if (!studyUser)
       throw new NotFoundException('해당 유저 혹은 스터디를 찾을 수 없습니다.');
 
-    if (studyUser.isHost) throw new ForbiddenException('권한이 없습니다.');
+    if (studyUser.isHost)
+      throw new ForbiddenException('호스트는 신청이 불가능합니다.');
 
     return studyUser;
   }
