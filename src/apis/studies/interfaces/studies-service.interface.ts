@@ -14,8 +14,7 @@ export interface IStudiesServiceCreateStudy {
 
 export interface IStudiesServiceJoinStudy {
   studyId: string;
-  hostId: string;
-  guestId: string;
+  userId: string;
 }
 
 export interface IStudiesServiceUpdateStudy {

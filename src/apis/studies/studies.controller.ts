@@ -37,12 +37,12 @@ export class StudiesController {
   }
 
   @UseGuards(AccessAuthGuard)
-  @Post('join/:studyId/:guestId')
+  @Post('join/:studyId')
   async joinStudy(
     @User() user: UserAfterAuth,
-    @Param() { guestId, studyId },
+    @Param('studyId') studyId: string,
   ): Promise<MessageResDto> {
-    await this.studiesService.joinStudy({ studyId, hostId: user.id, guestId });
+    await this.studiesService.joinStudy({ studyId, userId: user.id });
 
     return { message: '스터디 참여가 완료되었습니다.' };
   }
