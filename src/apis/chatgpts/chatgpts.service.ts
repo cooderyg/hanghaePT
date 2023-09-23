@@ -13,13 +13,10 @@ export class ChatgptsService {
     const { library, topic, type } = continueQuestionDto;
 
     const messages: IChatgptServiceCreateChatgpt[] = [
-      { role: 'system', content: `You are an expert in ${type}.` },
-      { role: 'system', content: `You are a master of ${topic}.` },
-      { role: 'system', content: `You are a master of ${library}.` },
+      { role: 'system', content: `You are master of ${topic}.` },
       {
         role: 'system',
-        content: `You should answer very kindly, going step by step with examples.
-      `,
+        content: `You should answer very kindly, going step by step with examples.`,
       },
       {
         role: 'system',
@@ -79,16 +76,27 @@ export class ChatgptsService {
       messages.push({ role: 'user', content: q.query });
       messages.push({ role: 'assistant', content: q.answer });
     });
+    if (library) {
+      messages.push({
+        role: 'user',
+        content: `이 질문은 ${type}, ${topic}에 대한 질문이야. ${library}라는 라이브러리를 사용할거야. ${continueQuestionDto.query}`,
+      });
+    } else {
+      messages.push({
+        role: 'user',
+        content: `이 질문은 ${type}, ${topic}에 대한 질문이야. ${continueQuestionDto.query}`,
+      });
+    }
 
-    messages.push({ role: 'user', content: continueQuestionDto.query });
+    // { role: 'system', content: `You can help me about ${type}.` },
 
+    console.log(messages);
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo-16k',
       messages,
 
-      temperature: 0.7,
+      temperature: 1,
       max_tokens: 1000,
-
     });
 
     const responseData = {
