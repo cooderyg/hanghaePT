@@ -5,7 +5,7 @@ import { SearchReqDto } from 'src/commons/dto/page-req.dto';
 import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import { QuestionDetail } from './entities/questionDetail.entity';
 
-@Controller('question-details')
+@Controller('api/question-details')
 export class QuestionDetailsController {
   constructor(
     private readonly questionDetailsService: QuestionDetailsService,
