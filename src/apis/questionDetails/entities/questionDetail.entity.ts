@@ -21,6 +21,8 @@ export class QuestionDetail {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Question, (question) => question.questionDetails)
+  @ManyToOne(() => Question, (question) => question.questionDetails, {
+    onDelete: 'CASCADE',
+  })
   question: Question;
 }

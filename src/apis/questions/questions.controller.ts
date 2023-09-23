@@ -79,7 +79,7 @@ export class QuestionsController {
   async findQuestion(
     @User() user: UserAfterAuth,
     @Param('questionId') questionId: string,
-  ) {
+  ): Promise<Question> {
     return await this.questionsService.findQuestion({
       userId: user.id,
       questionId,
