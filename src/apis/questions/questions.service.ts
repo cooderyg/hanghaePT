@@ -133,7 +133,6 @@ export class QuestionsService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    console.log(question);
     if (question.user.id !== userId) {
       throw new ForbiddenException('권한이 없습니다.');
     }
