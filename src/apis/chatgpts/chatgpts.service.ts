@@ -11,6 +11,7 @@ export class ChatgptsService {
 
     // 라이브러리, 주제, 질문유형
     const { library, topic, type } = continueQuestionDto;
+    console.log('요거슨토픽이여~~~~~', topic);
 
     const messages: IChatgptServiceCreateChatgpt[] = [
       { role: 'system', content: `You are an expert in ${type}.` },

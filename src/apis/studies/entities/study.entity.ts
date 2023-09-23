@@ -7,18 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { StudyUser } from './studyUser.entity';
-
-export enum TOPIC {
-  JAVA = 'JAVA',
-  JAVASCRIPT = 'JAVASCRIPT',
-  KOTLIN = 'KOTLIN',
-  REACT = 'REACT',
-  NEXT = 'NEXT',
-  NEST = 'NEST',
-  NODE = 'NODE',
-  SPRING = 'SPRING',
-  CS = 'CS',
-}
+import { TOPIC } from 'src/apis/questions/entities/question.entity';
 
 @Entity()
 export class Study {

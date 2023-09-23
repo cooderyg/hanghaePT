@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { TOPIC } from '../entities/study.entity';
+import { TOPIC } from 'src/apis/questions/entities/question.entity';
 
 export class UpdateStudyDto {
   @IsNotEmpty()

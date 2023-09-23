@@ -15,21 +15,21 @@ export enum TOPIC {
   JAVASCRIPT = 'JAVASCRIPT',
   KOTLIN = 'KOTLIN',
   REACT = 'REACT',
-  NEXT = 'NEXT',
-  NEST = 'NEST',
-  NODE = 'NODE',
+  NEXT = 'NEXTJS',
+  NEST = 'NESTJS',
+  NODE = 'NODEJS',
   SPRING = 'SPRING',
   CS = 'CS',
 }
 
 export enum TYPE {
-  APP = 'APP', // 모바일 앱 개발
-  WEB = 'WEB', // 웹 개발
-  TOOL = 'TOOL', // 개발 도구
-  LANGUAGE = 'LANGUAGE', // 개발 언어
-  SECURITY = 'SECURITY', // 보안
-  DATA = 'DATA', // 데이터 관리
-  CAREER = 'CAREER', // 채용
+  APP = 'APP DEVELOPMENT', // 모바일 앱 개발
+  WEB = 'WEB DEVELOPMENT', // 웹 개발
+  TOOL = 'DEVELOPMENT TOOL', // 개발 도구
+  LANGUAGE = 'PROGRAMMING LANGUAGE', // 개발 언어
+  SECURITY = 'COMPUTER SECURITY', // 보안
+  DATA = 'DATA MANAGEMENT', // 데이터 관리
+  CAREER = 'DEVELOPER CAREER', // 채용
 }
 
 @Entity()
