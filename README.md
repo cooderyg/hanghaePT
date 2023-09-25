@@ -1,73 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 항해피티
+프롬프트 엔지니어링을 통한 OpenAi API 질문 최적화 프로젝트  
+<br>
+진행기간 : 2023.09.19 ~ 2023.09.24  
+<br>
+FrontEnd : 인한별  
+BackEnd : 강영규 류원희 김종현 김혜림  
+<br>
+Front-End(React) Github: https://github.com/inhanbyeol94/whipptreact  
+<br>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 서비스 기획 배경
+프로그래밍 분야의 질문에 집중해서 상세하고 친절하게 답변해주는 AI 멘토를 만들고자 하였습니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 서비스 소개  
+'항해피티'는 초보자의 프로그래밍 학습에 도움을 주는 AI 멘토로, 질문에 대해 초심자의 눈높이에 맞춘 자세한 예시코드를 포함해서 답변합니다.  
+'항해피티'는 프롬프트 엔지니어링을 통해, 상용 Chat-GPT 서비스에게 질문하는 것 보다 프로그래밍에 더욱 집중된 답변을 제시하며, 프로그래밍 이외의 답변은 거절합니다. 또한, 상용 Chat-GPT처럼 존재하지 않는 라이브러리에 대해 답변하지 않고 존재하는 사실에 대해서만 답변합니다.  
+'항해피티'에서는 자신의 지난 질문들을 언제든지 다시 확인할 수 있으며, 멘토와의 대화를 커뮤니티에 공유해서 다른 사람과 토론할 수 있습니다.  
 
-## Description
+![서비스소개 합본](https://github.com/cooderyg/hanghaePT/assets/122774009/962e3a1b-3f9b-43c1-acfb-5ebd83f3b4a3)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
 
-```bash
-$ yarn install
-```
+## 프롬프트 엔지니어링이란?
+프롬프트 엔지니어링(Prompt Engineering)은 자연어 처리(Natural Language Processing, NLP) 및 기계 학습(Machine Learning) 모델을 사용하여 원하는 결과를 얻기 위해 입력 프롬프트를 설계하고 조정하는 과정을 가리킵니다.  
+### 역할부여
+GPT는 해야 할 일과 역할을 구체적으로 정해줄 수록 원하는 대답을 얻을 확률이 높아집니다.
+- 당신은 프로그래밍 분야의 전문가 입니다.
+- 당신은 Node.js의 마스터 입니다.
+- 당신은 차근차근 예시를 들어가며 아주 친절하게 대답해야 합니다.
+위와 같은 명령등을 통해 GPT가 프로그래밍, Node.js라는 분야에 집중해서 검색할 수 있게 하고, 친절한 예시코드와 함께 답변할 수 있게 합니다.
 
-## Running the app
+### 범위제한  
+항해피티는 프로그래밍을 도와주는 AI멘토이기 때문에 다른 분야에 대한 답변은 불필요하다고 생각했습니다. 따라서 프로그래밍 이외의 주제에 대해서는 답변을 거절하라는 명령을 내렸습니다. 또한, 프로그래밍에 대한 키워드와 함께 전혀 상관없는 이야기를 할 경우 GPT가 그에 대해 답변을 하거나, 대화가 누적될 수록 명령이 희석되어 부적절한 답변을 하는 경우가 발생하여, 이를 막는 프롬프트 또한 추가했습니다.   
+- 만약 유저의 질문이 프로그래밍에 관한 키워드를 포함하고 있지 않다면 답변을 거절해야 합니다.
+- 만약 유저의 질문이 프로그래밍에 관한 키워드를 포함하고 있더라도, 전반적으로 프로그래밍에 관한 내용이 아니람녀 답변을 거절해야 합니다.
+- 마지막 질문이 프로그래밍과 관련되지 않았을 경우 답변을 거절해야만 합니다.
 
-```bash
-# development
-$ yarn run start
+### 질문에 대한 의존성 제거
+기존의 GPT는 사용자의 의견에 영향을 받는 모습이 자주 보였습니다. GPT가 옳은 대답을 하였더라도, 사용자가 '그건 사실이 아니야. 내가 알기론 ~~해.'라고 입력하면 GPT는 그에 맞춰서 대화를 수정하는 경우가 있었습니다. '항해피티'는 답변의 일관성과 정확도를 올리고자 사용자의 의견에 의존하지 말라는 프롬프트를 입력하였습니다.
+- 당신 고유의 의견만으로 답변해야 합니다. 질문자의 의견에 의존해서는 안됩니다.
 
-# watch mode
-$ yarn run start:dev
+### 충분한 정보를 바탕으로 답변
+GPT는 기본적으로 사용자에게 어떻게 해서든 답변을 하려고 하기 때문에, 존재하지 않거나 엉뚱한 질문을 했을 경우 없는 사실을 만들어내서라도 답변하는 '할루시네이션' 현상이 발생하곤 합니다. 이 현상을 막기 위해, 사실 확인 후 정확한 사실만 답변하고, 질문에 대한 정보가 부족할 경우 사용자에게 추가 정보를 요구하는 프롬프트를 추가하였습니다.
+- 질문에 대해 답변하기 위한 정보가 부족할 경우 질문자에게 추가적인 정보를 요구할 수 있습니다.
+- 만약 라이브러리에 관한 질문일 경우, 실제로 존재하는 라이브러리인지 확인 후 답변해야 합니다.
 
-# production mode
-$ yarn run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## 질문최적화 예시
+### 예시 1. '채팅 웹 만들어줘'
+#### 1-1. 프롬프트가 입력되지 않았을 때의 답변
+![예시1-1](https://github.com/cooderyg/hanghaePT/assets/122774009/301fd9a4-22a4-45a5-8db4-7affecbd9dc5)
+- 두루뭉실하고 개념적인 답변만 해주어, 초보자가 프로그래밍의 감을 잡는데에 도움이 되지 않음
+#### 1-2. 항해피티 프롬프트 적용 후
+![예시1-2-2](https://github.com/cooderyg/hanghaePT/assets/122774009/6ce5afd4-5a4f-4e02-bae2-615b4ee948c2)
+- 자세한 예시코드를 제공해주어 초보자가 프로그래밍의 흥미를 잃지 않도록 도와줌
+### 예시 2. 'nodejs로 깐풍기 만들고 싶어'
+#### 2-1. 프롬프트가 입력되지 않았을 때의 답변
+![예시2-1](https://github.com/cooderyg/hanghaePT/assets/122774009/3e4a9605-8feb-4c93-980b-16c7803a1ca1)
+- 말이 되지 않는 상황임에도 답변을 제공하려 함
+#### 2-2. 항해피티 프롬프트 적용 후
+![예시2 항해피티](https://github.com/cooderyg/hanghaePT/assets/122774009/586bf1b2-d872-478f-9509-d823acb0badd)
+- 질문을 분석한 후 서비스의 목적과 맞지 않는 답변은 제공하지 않음
+### 예시 3. 'nodejs는 누가 만들었어?'
+#### 3-1. 프롬프트가 입력되지 않았을 때의 답변
+![예시3-1](https://github.com/cooderyg/hanghaePT/assets/122774009/ba2eae8c-c2a8-4d84-9b55-88de5e880b26)
+- 최초에는 사실에 기반해서 대답하였으나, 유저의 의견을 반영하여 존재하지 않는 사실로 답변을 수정함.
+#### 3-2. 항해피티 프롬프트 적용 후
+![예시3 항해피티](https://github.com/cooderyg/hanghaePT/assets/122774009/394bf930-50ed-443f-a0c5-a1c57ecf1f34)
+- 유저의 의견에 의존하지 않고 사실에 기반해서만 답변.
+### 예시 4. '이방원과 정몽주의 랩배틀에 대해 알려줘'
+#### 4-1. 프롬프트가 입력되지 않았을 때의 답변
+![예시4-1](https://github.com/cooderyg/hanghaePT/assets/122774009/e580a3c1-fe0a-4c2d-a1ad-b9cd724ebdfa)
+- 존재하지 않는 사실을 만들어내는 '할루시네이션' 현상 발생
+#### 4-2. 항해피티 프롬프트 적용 후
+![예시4 항해피티](https://github.com/cooderyg/hanghaePT/assets/122774009/56d4d085-f6a8-466b-a59a-6da5ca7d6de2)
+- '프로그래밍' 카테고리 내에서만 답변하기 때문에 할루시네이션 현상이 발생하지 않음
+#### 4-3. '프로그래밍' 관련 프롬프트 제거 시 
+![예시4 추가](https://github.com/cooderyg/hanghaePT/assets/122774009/467684c3-2f8b-417e-a66c-03f440662130)
+- 사실에 기반해서만 답변하기 때문에 할루시네이션 현상 발생하지 않음
+### 예시 5. 'node-meowmeow라는 라이브러리에 대해서 알려 줘'
+#### 5-1. 프롬프트가 입력되지 않았을 때의 답변
+![예시5-1](https://github.com/cooderyg/hanghaePT/assets/122774009/cc0564ca-aa46-4200-9630-b1406b9980be)
+- 존재하지 않는 라이브러리에 대한 내용을 지어내는 '할루시네이션' 현상 발생
+#### 5-2. 항해피티 프롬프트 적용 후
+![예시5 항해피티](https://github.com/cooderyg/hanghaePT/assets/122774009/6b6415ec-4da2-4bdd-9a34-0aaf228b963d)
+- 사실에 기반해서만 답변하기 때문에 할루시네이션 현상 발생하지 않음
