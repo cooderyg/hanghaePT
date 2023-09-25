@@ -1,6 +1,5 @@
-
-# 항해피티![항해피티 로고](https://github.com/cooderyg/hanghaePT/assets/122774009/bd92d68c-283a-4335-b07c-ec653a113aaf)
-
+![항해피티 로고](https://github.com/cooderyg/hanghaePT/assets/122774009/bd92d68c-283a-4335-b07c-ec653a113aaf)
+# 항해피티
 프롬프트 엔지니어링을 통한 OpenAi API 질문 최적화 프로젝트  
 <br>
 진행기간 : 2023.09.19 ~ 2023.09.24  
