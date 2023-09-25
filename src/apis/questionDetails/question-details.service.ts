@@ -1,10 +1,7 @@
-import { Body, Injectable, Param, Post, UseGuards } from '@nestjs/common';
-import { CreateQuestionDetailDto } from './dto/create-question-detail.dto';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QuestionDetail } from './entities/questionDetail.entity';
 import { Brackets, Repository } from 'typeorm';
-import { AccessAuthGuard } from '../auth/guard/auth.guard';
-import { User, UserAfterAuth } from 'src/commons/decorators/user.decorator';
 import {
   IQuestionDetailsServiceCreateQuestionDetails,
   IQuestionDetailsServiceFindMyQuestionDetails,
@@ -120,11 +117,11 @@ export class QuestionDetailsService {
     continueQuestionDto,
   }: IQuestionDetailsServiceCreateQuestionDetails): Promise<void> {
     const answer = JSON.parse(chatgptAnswer).message;
-    const createQuestion = await this.questionDetailsRepository.save({
+
+    await this.questionDetailsRepository.save({
       question: { id: questionId },
       answer,
       ...continueQuestionDto,
     });
-    return;
   }
 }
