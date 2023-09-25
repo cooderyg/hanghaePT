@@ -39,7 +39,7 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken);
     res.cookie('accessToken', accessToken);
 
-    res.redirect('http://localhost:3001');
+    res.redirect('https://hanghaept.shop');
   }
 
   @UseGuards(RefreshAuthGuard)
