@@ -106,17 +106,6 @@ export class StudiesController {
     return studies;
   }
 
-  // @Get('topics')
-  // async findStudiesByTopic(
-  //   @Query() topicReqDto: TopicReqDto,
-  // ): Promise<Study[]> {
-  //   const studies = await this.studiesService.findStudiesByTopic({
-  //     topicReqDto,
-  //   });
-
-  //   return studies;
-  // }
-
   @UseGuards(AccessAuthGuard)
   @Get('mypages')
   async findMyStudies(

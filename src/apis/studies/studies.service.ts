@@ -178,7 +178,6 @@ export class StudiesService {
     const { page, size, keyword } = searchReqDto;
     let studies: [Study[], number];
     if (keyword) {
-      console.log('워드안', keyword);
       studies = await this.studiesRepository
         .createQueryBuilder('study')
         .select([
