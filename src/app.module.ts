@@ -34,7 +34,7 @@ import { MessagesModule } from './apis/messages/messages.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
       entities: [__dirname + '/apis/**/*.entity.*'],
-      synchronize: true, // 개발환경에서만 사용
+      synchronize: false, // 개발환경에서만 사용
       logging: true,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: 'Asia/Seoul',
